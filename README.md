@@ -1,3 +1,3 @@
 # 451-suite
 
-A set of web apps that I develop(primarily for my personal use).
+A collection of student-built productivity tools designed for real student life.
