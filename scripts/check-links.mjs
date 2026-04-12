@@ -100,7 +100,6 @@ function checkHtmlFiles(errors) {
   }
 }
 
-
 // ── メイン ────────────────────────────────────────────────────
 
 const errors = [];
@@ -114,6 +113,4 @@ if (errors.length) {
 
 const htmlCount = collectFiles(SITE_ROOT, [".html"]).length;
 
-console.log(
-  `Local link check passed — ${htmlCount} HTML files.`,
-);
+console.log(`Local link check passed — ${htmlCount} HTML files.`);
