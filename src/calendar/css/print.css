@@ -1,0 +1,246 @@
+/* ============================================================
+   Print / PDF 出力 — Phase 4
+   ============================================================ */
+@page {
+  margin: 10mm;
+}
+
+@media print {
+  /* ダークモード変数のリセット（body.darkのCSS変数を印刷用に上書き） */
+  body.dark {
+    --color-surface: #ffffff;
+    --color-surface-2: #f5f5f5;
+    --color-surface-3: #eeeeee;
+    --color-bg: #ffffff;
+    --color-text-primary: #1c2b3a;
+    --color-text-secondary: #3d5166;
+    --color-text-tertiary: #7a92a6;
+    --color-border: rgba(28, 43, 58, 0.12);
+    --color-border-strong: rgba(28, 43, 58, 0.22);
+    --color-accent: #c8952a;
+    --color-accent-light: #f0b84a;
+    --color-accent-subtle: rgba(200, 149, 42, 0.1);
+  }
+  :root {
+    --print-title-height: 14mm;
+    --print-dow-height: 7mm;
+    --print-grid-height: calc(100vh - 24mm);
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-sizing: border-box !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body::before {
+    display: none !important;
+  }
+
+  /* ── UI chrome をすべて非表示 ── */
+  #authScreen,
+  header,
+  aside,
+  .controls,
+  .tab-bar-desktop,
+  .tab-bar-mobile,
+  #calendarNav,
+  #logoutBtn,
+  #userInfoBox,
+  .sync-status,
+  dialog,
+  #timetable-root,
+  #panel-dashboard,
+  #panel-timetable,
+  #panel-settings {
+    display: none !important;
+  }
+
+  /* ── App wrapper ── */
+  .app {
+    padding: 0 !important;
+    max-width: none !important;
+    width: auto !important;
+    margin: 0 auto !important;
+  }
+
+  /* ── カレンダーパネルを全幅表示 ── */
+  #panel-calendar {
+    display: block !important;
+    padding: 0 !important;
+    width: auto !important;
+    margin: 0 auto !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  #panel-calendar .calendar-wrap {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* ── カレンダーグリッド ── */
+  .calendar {
+    grid-template-columns: repeat(7, 1fr) !important;
+    grid-template-rows: var(--print-dow-height) repeat(6, minmax(0, 1fr)) !important;
+    grid-auto-rows: unset !important;
+    border: 1px solid #000 !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    height: var(--print-grid-height) !important;
+    max-height: var(--print-grid-height) !important;
+    overflow: hidden !important;
+  }
+
+  .dow {
+    font-size: 8pt !important;
+    background: #f0f0f0 !important;
+    color: #000 !important;
+    border-bottom: 1.5px solid #000 !important;
+    border-right: 1px solid #ccc !important;
+    min-height: 0 !important;
+    padding: 1.2mm 0.6mm !important;
+  }
+
+  .cell {
+    min-height: 0 !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-color: #ccc !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    cursor: default !important;
+    padding: 1.2mm 1mm 0.8mm !important;
+    overflow: hidden !important;
+    align-content: start !important;
+  }
+
+  .cell.today {
+    background: #f8f8f8 !important;
+  }
+
+  .today .date {
+    background: #222 !important;
+    color: #fff !important;
+  }
+
+  .date {
+    font-size: 10pt !important;
+    color: #000 !important;
+    width: 6mm !important;
+    height: 6mm !important;
+    margin-bottom: 1mm !important;
+  }
+
+  /* heat classes → 印刷では無効化 */
+  .heat-1,
+  .heat-2,
+  .heat-3,
+  .heat-4 {
+    background: #fff !important;
+  }
+
+  /* 空セルのブラックアウト修正 */
+  .cell.empty {
+    background: #f8f8f8 !important;
+    opacity: 1 !important; /* 既存の opacity: 0.5 を解除 */
+  }
+
+  /* ── イベント行 ── */
+  .ev-row {
+    display: flex !important;
+    width: 100% !important;
+    margin: 0 0 0.6mm !important;
+    padding: 0 !important;
+    gap: 1mm !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+  }
+
+  .ev-icon {
+    display: none !important;
+  }
+
+  .ev-title {
+    font-size: 6.5pt !important;
+    line-height: 1.25 !important;
+    color: #000 !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: unset !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .ev-more {
+    font-size: 6pt !important;
+    color: #555 !important;
+    margin-top: auto !important;
+  }
+
+  /* ── 旧 .chip (後方互換) ── */
+  .chip {
+    background: none !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    font-size: 7pt !important;
+    border: none !important;
+    padding: 1px 0 !important;
+  }
+
+  /* 年月ヘッダーを印刷時に追加 */
+  #panel-calendar::before {
+    content: attr(data-print-title);
+    display: block;
+    font-size: 13pt;
+    font-weight: 700;
+    color: #000;
+    height: calc(var(--print-title-height) - 4mm);
+    padding: 0 0 3mm 0;
+    margin-bottom: 4mm;
+    border-bottom: 1.5pt solid #000;
+  }
+
+  /* today強調を印刷時は除去 */
+  .cell.today {
+    background: #fff !important;
+  }
+  .today .date {
+    background: transparent !important;
+    color: #1c2b3a !important;
+    font-weight: 700 !important;
+    box-shadow: none !important;
+  }
+
+  /* ── 印刷メタデータバー ── */
+  .print-meta {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 7mm;
+    background: #fff;
+    border-top: 0.5pt solid #ccc;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4mm;
+    font-size: 7pt;
+    color: #888;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+}

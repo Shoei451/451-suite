@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule</title>
+    <link rel="icon" href="schedule-tracker.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ======================== AUTH ======================== -->
+    <div id="auth-screen">
+      <div class="auth-card">
+        <span class="auth-badge">SCHEDULE / 451-n</span>
+        <h1 class="auth-title" id="auth-title">ログイン</h1>
+        <p class="auth-sub">スケジュール管理ツール</p>
+        <div class="form-group">
+          <label class="form-label" for="email">メールアドレス</label>
+          <input
+            class="form-input"
+            type="email"
+            id="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">パスワード</label>
+          <input
+            class="form-input"
+            type="password"
+            id="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+        </div>
+        <button class="btn btn-primary" id="btn-submit">ログイン</button>
+        <p class="error-msg" id="auth-msg"></p>
+        <div class="auth-toggle">
+          <span id="auth-toggle-text">アカウントをお持ちでない方は</span>
+          <button id="btn-mode-toggle">新規登録</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== APP ======================== -->
+    <div id="app">
+      <!-- ── Navbar ── -->
+      <nav class="navbar">
+        <div class="navbar-brand">
+          <span class="navbar-logo">Schedule</span>
+          <span class="navbar-sub">451-n</span>
+        </div>
+
+        <!-- Desktop tab links -->
+        <div class="navbar-tabs" id="navbar-tabs">
+          <button class="navbar-tab active" data-tab="display">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="display: inline; vertical-align: -2px; margin-right: 4px"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            表示
+          </button>
+          <button class="navbar-tab" data-tab="settings">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="display: inline; vertical-align: -2px; margin-right: 4px"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+              />
+            </svg>
+            設定
+          </button>
+        </div>
+
+        <div class="navbar-spacer"></div>
+        <button class="btn-signout" id="btn-signout">サインアウト</button>
+      </nav>
+
+      <!-- ── Body: sidebar + main ── -->
+      <div class="app-body">
+        <!-- ── Sidebar (desktop only) ── -->
+        <aside class="sidebar" id="sidebar">
+          <div class="sidebar-inner">
+            <div>
+              <p class="sb-label" style="margin-bottom: 0.5rem">曜日</p>
+              <div class="sidebar-day-grid" id="sb-day-grid"></div>
+            </div>
+
+            <div id="notif-banner-sb" class="notif-banner" style="margin: 0">
+              <span class="notif-banner-text" style="font-size: 0.75rem"
+                >通知を許可する</span
+              >
+              <button class="btn-allow" id="btn-allow-notif-sb">許可</button>
+            </div>
+
+            <div
+              style="
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 0.3rem;
+              "
+            >
+              <p class="sb-label" id="sb-day-label">─</p>
+              <div class="sb-slots" id="sb-slots"></div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ── Main area ── -->
+        <div class="main-area">
+          <!-- ── Display Tab ── -->
+          <div id="tab-display" class="tab-content active">
+            <div id="notif-banner" class="notif-banner">
+              <span class="notif-banner-text"
+                >通知を許可すると予定の前にお知らせします</span
+              >
+              <button class="btn-allow" id="btn-allow-notif">許可する</button>
+            </div>
+
+            <div class="clock-block">
+              <div class="clock-time" id="clock-time">00:00:00</div>
+              <div class="clock-date" id="clock-date">─</div>
+            </div>
+
+            <div class="current-event-bar empty" id="current-event-bar">
+              <div class="event-indicator"></div>
+              <div class="event-info">
+                <div class="event-label" id="event-label">予定なし</div>
+                <div class="event-time-range" id="event-time"></div>
+              </div>
+              <div class="event-next" id="event-next"></div>
+            </div>
+
+            <div class="chart-wrap">
+              <svg id="schedule-chart" viewBox="0 0 280 280"></svg>
+            </div>
+
+            <!-- Mobile only: today list -->
+            <div class="mobile-today-list" id="mobile-today-wrap">
+              <p
+                class="section-label"
+                style="padding: 0; margin-bottom: 0.45rem"
+              >
+                今日の予定
+              </p>
+              <div id="mobile-today-list"></div>
+            </div>
+          </div>
+
+          <!-- ── Settings Tab ── -->
+          <div id="tab-settings" class="tab-content">
+            <div class="settings-content">
+              <!-- Mobile only: viewDay slot list -->
+              <div class="mobile-settings-slots" id="mobile-settings-slots">
+                <p
+                  class="section-label"
+                  style="padding: 0; margin-bottom: 0.5rem"
+                >
+                  曜日で絞り込む
+                </p>
+                <div class="day-pills" id="mobile-day-pills"></div>
+                <div class="settings-slot-list" id="mobile-slot-list"></div>
+                <div class="divider"></div>
+              </div>
+
+              <!-- Add form (always visible) -->
+              <div class="add-form-card">
+                <p class="add-form-title" id="add-form-title">＋ 予定を追加</p>
+
+                <div class="form-row" style="margin-bottom: 0.75rem">
+                  <div class="form-group" style="margin: 0">
+                    <label class="form-label">開始</label>
+                    <input
+                      class="form-input"
+                      type="time"
+                      id="in-start"
+                      value="09:00"
+                    />
+                  </div>
+                  <div class="form-group" style="margin: 0">
+                    <label class="form-label">終了</label>
+                    <input
+                      class="form-input"
+                      type="time"
+                      id="in-end"
+                      value="10:00"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">ラベル</label>
+                  <input
+                    class="form-input"
+                    type="text"
+                    id="in-label"
+                    placeholder="例: 英語・睡眠・自習"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" id="add-day-pills-group"
+                    >登録する曜日（複数可）</label
+                  >
+                  <div
+                    class="day-pills"
+                    id="add-day-pills"
+                    style="margin-bottom: 0; margin-top: 0.25rem"
+                  ></div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">通知タイミング</label>
+                  <select class="form-input" id="in-notify">
+                    <option value="0">なし</option>
+                    <option value="5" selected>5分前</option>
+                    <option value="10">10分前</option>
+                    <option value="15">15分前</option>
+                    <option value="30">30分前</option>
+                  </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0.5rem">
+                  <label class="form-label">色</label>
+                  <div class="color-picker" id="color-picker"></div>
+                </div>
+
+                <button class="btn btn-primary" id="btn-add">追加</button>
+                <button class="btn-cancel" id="btn-cancel-edit">
+                  キャンセル
+                </button>
+                <p class="error-msg" id="add-error"></p>
+              </div>
+
+              <div class="divider"></div>
+              <p class="hint">
+                ※ 終了 &lt; 開始 の場合は翌日にまたぐ予定として扱います<br />
+                ※ 通知はこのページを開いている間のみ機能します
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- /main-area -->
+      </div>
+      <!-- /app-body -->
+
+      <!-- ── Bottom Tab Bar (mobile only) ── -->
+      <nav class="tab-bar">
+        <button class="tab-btn active" data-tab="display">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          表示
+        </button>
+        <button class="tab-btn" data-tab="settings">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+            />
+          </svg>
+          設定
+        </button>
+      </nav>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background pill -->
+  <rect width="32" height="32" rx="8" fill="#ede9fe"/>
+
+  <!-- Donut track -->
+  <circle cx="16" cy="16" r="9.5" fill="none" stroke="#c4b5fd" stroke-width="4.5"/>
+
+  <!-- Arc segment (roughly 9:00–15:00 range = about 135deg) -->
+  <path
+    d="M 16 6.5
+       A 9.5 9.5 0 0 1 24.22 20.25
+       L 21.55 18.71
+       A 6.5 6.5 0 0 0 16 9.5 Z"
+    fill="none"
+    stroke="#6d28d9"
+    stroke-width="4.5"
+    stroke-linecap="round"
+    fill-rule="evenodd"
+  />
+
+  <!-- Second arc segment (shorter, different position) -->
+  <path
+    d="M 9.3 20.8
+       A 9.5 9.5 0 0 1 9.0 10.5"
+    fill="none"
+    stroke="#8b5cf6"
+    stroke-width="4.5"
+    stroke-linecap="round"
+  />
+
+  <!-- Clock hand -->
+  <line x1="16" y1="16" x2="20.5" y2="11.5"
+        stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round"/>
+
+  <!-- Center dot -->
+  <circle cx="16" cy="16" r="2" fill="#1a1a1a"/>
+</svg>

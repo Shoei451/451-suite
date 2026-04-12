@@ -1,0 +1,379 @@
+/* ============================================================
+   Timetable — Phase 3
+   ============================================================ */
+
+/* Desktop: header + tab-bar + tt-day-header */
+/* Desktop: header≈65px + tab-bar-desktop≈43px + tab-panel padding-top≈20px */
+:root {
+  --tt-chrome-h: calc(65px + 43px + 20px);
+}
+
+.tt-cell,
+.tt-period-header {
+  min-height: 56px;
+  height: calc((100dvh - var(--tt-chrome-h)) / var(--tt-max-period, 6));
+}
+
+@media (max-width: 768px) {
+  :root {
+    --tt-chrome-h: calc(52px + 20px + 60px + env(safe-area-inset-bottom, 0px));
+  }
+  .tt-cell,
+  .tt-period-header {
+    min-height: 48px;
+    height: calc((100dvh - var(--tt-chrome-h)) / var(--tt-max-period, 6));
+  }
+}
+
+/* ── Loading / empty ────────────────────────────────────────── */
+.tt-loading,
+.tt-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 48px 24px;
+  color: var(--color-text-tertiary);
+  font-size: 14px;
+}
+
+/* ── Wrapper ─────────────────────────────────────────────────── */
+.tt-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px; /* prevent box-shadow clipping */
+}
+
+/* ── Grid ────────────────────────────────────────────────────── */
+.tt-grid {
+  display: grid;
+  min-width: 420px;
+}
+
+.tt-header-row,
+.tt-row {
+  display: grid;
+  /* period label col + 7 day cols */
+  grid-template-columns: 32px repeat(7, minmax(0, 1fr));
+}
+
+/* Weekend columns: subtle separator */
+.tt-header-row .tt-weekend,
+.tt-row .tt-weekend {
+  background: color-mix(in srgb, var(--color-surface-3) 40%, transparent);
+}
+
+/* ── Header row ──────────────────────────────────────────────── */
+.tt-corner {
+  /* intentionally empty */
+}
+
+.tt-day-header {
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: var(--color-surface-3);
+  border-bottom: 1.5px solid var(--color-border-strong);
+  border-right: 1px solid var(--color-border);
+  transition: background var(--dur-slow);
+}
+
+.tt-day-header:last-child {
+  border-right: none;
+}
+
+/* Sat / Sun header colours */
+.tt-header-row .tt-weekend:nth-child(7) {
+  color: var(--color-blue);
+}
+.tt-header-row .tt-weekend:nth-child(8) {
+  color: var(--color-danger);
+}
+
+/* ── Period number header ────────────────────────────────────── */
+.tt-period-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border-strong);
+  background: var(--color-surface-3);
+  min-height: 56px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Cells ───────────────────────────────────────────────────── */
+.tt-cell {
+  position: relative;
+  min-height: 56px;
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-in-out),
+    box-shadow var(--dur-fast);
+  overflow: hidden;
+}
+
+.tt-cell:last-child {
+  border-right: none;
+}
+
+/* Empty cell */
+.tt-cell--empty {
+  background: var(--color-surface);
+}
+
+.tt-cell--empty:hover {
+  background: var(--color-accent-subtle);
+  box-shadow: inset 0 0 0 1.5px var(--color-accent);
+}
+
+.tt-cell-add {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+}
+
+.tt-cell--empty:hover .tt-cell-add {
+  opacity: 1;
+}
+
+/* Filled cell */
+.tt-cell--filled {
+  background: var(--color-surface-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 4px;
+}
+
+.tt-cell--filled:hover {
+  background: color-mix(
+    in srgb,
+    var(--color-accent-subtle) 60%,
+    var(--color-surface-2)
+  );
+  box-shadow: inset 0 0 0 1.5px var(--color-accent);
+}
+
+.tt-cell-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.tt-cell-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tt-cell-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-align: center;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  word-break: break-all;
+}
+
+/* ── Popover editor ──────────────────────────────────────────── */
+.tt-popover {
+  position: absolute;
+  z-index: 500;
+  width: 260px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 16px;
+  animation: tt-pop var(--dur-mid) var(--ease-spring) both;
+}
+
+@keyframes tt-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.tt-popover-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tt-popover-label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.tt-popover-input {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--color-surface-2);
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: var(--radius-xs);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  min-height: 38px;
+  transition:
+    border-color var(--dur-fast),
+    box-shadow var(--dur-fast);
+}
+
+.tt-popover-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-subtle);
+}
+
+/* Icon grid */
+.tt-icon-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tt-icon-btn {
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-2);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast),
+    background var(--dur-fast),
+    color var(--dur-fast);
+  box-shadow: none;
+}
+
+.tt-icon-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tt-icon-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  transform: none;
+  box-shadow: none;
+}
+
+.tt-icon-btn.selected {
+  background: var(--color-text-primary);
+  color: var(--color-accent-light);
+  border-color: var(--color-text-primary);
+}
+
+/* Action row */
+.tt-popover-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.tt-btn-cancel,
+.tt-btn-clear,
+.tt-btn-save {
+  padding: 7px 12px;
+  font-size: 12px;
+  min-height: 32px;
+  border-radius: var(--radius-xs);
+  box-shadow: none;
+}
+
+.tt-btn-cancel {
+  background: transparent;
+  border-color: var(--color-border-strong);
+  color: var(--color-text-tertiary);
+}
+
+.tt-btn-clear {
+  background: transparent;
+  border-color: var(--color-border-strong);
+  color: var(--color-danger);
+}
+
+.tt-btn-clear:hover:not(:disabled) {
+  border-color: var(--color-danger);
+  background: rgba(192, 57, 43, 0.06);
+  transform: none;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .tt-cell {
+    min-height: 48px;
+  }
+
+  .tt-period-header {
+    min-height: 48px;
+    font-size: 10px;
+  }
+
+  .tt-cell-label {
+    font-size: 10px;
+  }
+
+  .tt-cell-icon svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .tt-popover {
+    width: calc(100vw - 24px);
+    left: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .tt-cell {
+    min-height: 40px;
+  }
+
+  .tt-day-header {
+    font-size: 10px;
+    padding: 6px 2px;
+  }
+}

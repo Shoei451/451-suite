@@ -1,0 +1,153 @@
+/* ============================================================
+   Calendar App — Design Tokens
+   ============================================================ */
+
+/* ── Fonts ──────────────────────────────────────────────────
+   System font only. No external requests.
+   ---------------------------------------------------------- */
+:root {
+  --font-ui:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans", "Meiryo", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* ── Light mode ─────────────────────────────────────────────
+   ---------------------------------------------------------- */
+:root {
+  /* Backgrounds */
+  --color-bg: #faf8f3;
+  --color-surface: #ffffff;
+  --color-surface-2: #f2efe8;
+  --color-surface-3: #e8e4da;
+
+  /* Text */
+  --color-text-primary: #1c2b3a;
+  --color-text-secondary: #3d5166;
+  --color-text-tertiary: #7a92a6;
+  --color-text-muted: #b0c4d4;
+
+  /* Borders */
+  --color-border: rgba(28, 43, 58, 0.12);
+  --color-border-strong: rgba(28, 43, 58, 0.22);
+
+  /* Accent */
+  --color-accent: #c8952a;
+  --color-accent-light: #f0b84a;
+  --color-accent-subtle: rgba(200, 149, 42, 0.1);
+
+  /* Semantic */
+  --color-danger: #c0392b;
+  --color-warn: #d68c1a;
+  --color-ok: #2d7d5f;
+  --color-blue: #2563a8;
+
+  /* Shadows */
+  --shadow-sm:
+    0 1px 3px rgba(28, 43, 58, 0.06), 0 1px 2px rgba(28, 43, 58, 0.04);
+  --shadow-md:
+    0 4px 12px rgba(28, 43, 58, 0.08), 0 2px 4px rgba(28, 43, 58, 0.06);
+  --shadow-lg:
+    0 12px 40px rgba(28, 43, 58, 0.12), 0 4px 12px rgba(28, 43, 58, 0.08);
+  --shadow-xl:
+    0 24px 64px rgba(28, 43, 58, 0.18), 0 8px 24px rgba(28, 43, 58, 0.1);
+
+  /* Radii */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 32px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 0.15s;
+  --dur-mid: 0.25s;
+  --dur-slow: 0.4s;
+
+  /* ── Category colours ──────────────────────────────────────
+     Each category: --cat-X-bg (subtle fill) + --cat-X-fg (icon/text)
+     ---------------------------------------------------------- */
+  --cat-submission-bg: rgba(160, 189, 184, 0.18);
+  --cat-submission-fg: #4a8a82;
+
+  --cat-exam-bg: rgba(30, 92, 92, 0.1);
+  --cat-exam-fg: #1e5c5c;
+
+  --cat-formal-exam-bg: rgba(247, 165, 0, 0.12);
+  --cat-formal-exam-fg: #a06800;
+
+  --cat-toshin-bg: rgba(0, 156, 136, 0.12);
+  --cat-toshin-fg: #007a6a;
+
+  --cat-schedule-bg: rgba(138, 153, 144, 0.15);
+  --cat-schedule-fg: #556860;
+
+  --cat-club-bg: rgba(0, 195, 255, 0.12);
+  --cat-club-fg: #0077aa;
+
+  --cat-holiday-bg: rgba(255, 107, 157, 0.12);
+  --cat-holiday-fg: #b03060;
+
+  --cat-other-bg: rgba(107, 114, 128, 0.12);
+  --cat-other-fg: #4b5563;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────
+   Text/border variables → light values.
+   Background variables → dark values.
+   ---------------------------------------------------------- */
+body.dark {
+  --color-bg: #0f1a24;
+  --color-surface: #1a2738;
+  --color-surface-2: #1f2f40;
+  --color-surface-3: #253548;
+
+  --color-text-primary: #e8edf2;
+  --color-text-secondary: #a8bece;
+  --color-text-tertiary: #6a8a9e;
+  --color-text-muted: #3d5566;
+
+  --color-border: rgba(232, 237, 242, 0.1);
+  --color-border-strong: rgba(232, 237, 242, 0.18);
+
+  --color-accent: #d4a43a;
+  --color-accent-light: #f0c060;
+  --color-accent-subtle: rgba(212, 164, 58, 0.12);
+
+  --color-danger: #e05a4a;
+  --color-warn: #e0a030;
+  --color-ok: #3a9a72;
+  --color-blue: #4a8ad4;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.28);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.36);
+  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.44);
+
+  --cat-submission-bg: rgba(160, 189, 184, 0.12);
+  --cat-submission-fg: #6ab0a8;
+
+  --cat-exam-bg: rgba(30, 92, 92, 0.18);
+  --cat-exam-fg: #4a9a9a;
+
+  --cat-formal-exam-bg: rgba(247, 165, 0, 0.14);
+  --cat-formal-exam-fg: #d4a030;
+
+  --cat-toshin-bg: rgba(0, 156, 136, 0.14);
+  --cat-toshin-fg: #2ab0a0;
+
+  --cat-schedule-bg: rgba(138, 153, 144, 0.12);
+  --cat-schedule-fg: #8aaa9a;
+
+  --cat-club-bg: rgba(0, 195, 255, 0.12);
+  --cat-club-fg: #30b0d8;
+
+  --cat-holiday-bg: rgba(255, 107, 157, 0.12);
+  --cat-holiday-fg: #d06080;
+
+  --cat-other-bg: rgba(107, 114, 128, 0.12);
+  --cat-other-fg: #8a9aaa;
+}

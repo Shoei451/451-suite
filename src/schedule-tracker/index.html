@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule | Introduction - Shoei451</title>
+    <link rel="icon" href="schedule-tracker.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --color-bg: #faf8ff;
+        --color-surface: #ffffff;
+        --color-border: #e8e4f4;
+        --color-text-primary: #1a1a1a;
+        --color-text-secondary: #6b6b6b;
+        --color-accent: #6d28d9;
+        --color-accent-light: #ede9fe;
+        --color-accent-mid: #8b5cf6;
+
+        --font-sans: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+        --font-display: "Zen Kaku Gothic New", "Noto Sans JP", sans-serif;
+        --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+        --space-xs: 0.5rem;
+        --space-sm: 1rem;
+        --space-md: 1.5rem;
+        --space-lg: 2.5rem;
+        --space-xl: 4.5rem;
+
+        --radius-sm: 6px;
+        --radius-md: 12px;
+        --radius-lg: 20px;
+        --shadow-sm: 0 1px 3px rgba(109, 40, 217, 0.06);
+        --shadow-md: 0 4px 24px rgba(109, 40, 217, 0.1);
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background: var(--color-bg);
+        color: var(--color-text-primary);
+        font-size: 1rem;
+        line-height: 1.8;
+        font-feature-settings: "pkna";
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ── NAVBAR ── */
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(250, 248, 255, 0.9);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--color-border);
+      }
+      .navbar__inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0.85rem var(--space-md);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .navbar__logo {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        text-decoration: none;
+      }
+      .navbar__logo-text {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+      }
+      .badge {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        color: var(--color-accent);
+        background: var(--color-accent-light);
+        padding: 0.1rem 0.5rem;
+        border-radius: 100px;
+        letter-spacing: 0.08em;
+      }
+      .navbar__cta {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.45rem 1.1rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.85rem;
+        font-weight: 500;
+        font-family: var(--font-sans);
+        background: var(--color-accent);
+        color: white;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.15s;
+      }
+      .navbar__cta:hover {
+        opacity: 0.85;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: var(--space-xl) var(--space-md) var(--space-lg);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-lg);
+        align-items: center;
+      }
+      @media (max-width: 768px) {
+        .hero {
+          grid-template-columns: 1fr;
+          padding: var(--space-lg) var(--space-md);
+        }
+        .hero__visual {
+          order: -1;
+        }
+      }
+      .hero__eyebrow {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-accent);
+        margin-bottom: 0.9rem;
+      }
+      .hero__title {
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+        margin-bottom: var(--space-sm);
+      }
+      .hero__title span {
+        color: var(--color-accent);
+      }
+      .hero__sub {
+        font-size: 1rem;
+        color: var(--color-text-secondary);
+        max-width: 400px;
+        line-height: 1.8;
+        margin-bottom: var(--space-md);
+      }
+      .hero__actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .btn--primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.75rem 1.6rem;
+        border-radius: var(--radius-sm);
+        font-family: var(--font-sans);
+        font-size: 0.95rem;
+        font-weight: 500;
+        background: var(--color-accent);
+        color: white;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s;
+        box-shadow: 0 2px 8px rgba(109, 40, 217, 0.25);
+      }
+      .btn--primary:hover {
+        opacity: 0.88;
+        transform: translateY(-1px);
+      }
+      .btn--ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.75rem 1.4rem;
+        border-radius: var(--radius-sm);
+        font-family: var(--font-sans);
+        font-size: 0.95rem;
+        font-weight: 500;
+        background: transparent;
+        color: var(--color-text-secondary);
+        text-decoration: none;
+        border: 1px solid var(--color-border);
+        transition: all 0.15s;
+        cursor: pointer;
+      }
+      .btn--ghost:hover {
+        background: var(--color-surface);
+        color: var(--color-text-primary);
+      }
+
+      /* ── APP MOCKUP SVG ── */
+      .hero__visual {
+        display: flex;
+        justify-content: center;
+      }
+      .mockup-wrap {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        width: 100%;
+        max-width: 340px;
+      }
+      .mockup-bar {
+        background: rgba(250, 248, 255, 0.95);
+        border-bottom: 1px solid var(--color-border);
+        padding: 0.65rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .mockup-bar-brand {
+        font-family: var(--font-display);
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+      .mockup-body {
+        padding: 1rem;
+      }
+      .mockup-clock {
+        text-align: center;
+        margin-bottom: 0.75rem;
+      }
+      .mockup-clock-time {
+        font-family: var(--font-mono);
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        color: var(--color-text-primary);
+        line-height: 1;
+      }
+      .mockup-clock-date {
+        font-size: 0.72rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.2rem;
+      }
+      .mockup-event {
+        background: #ede9fe;
+        border-left: 3px solid #6d28d9;
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .mockup-event-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #6d28d9;
+        flex-shrink: 0;
+      }
+      .mockup-event-label {
+        font-size: 0.82rem;
+        font-weight: 500;
+      }
+      .mockup-event-time {
+        font-size: 0.68rem;
+        color: var(--color-text-secondary);
+        font-family: var(--font-mono);
+      }
+      .mockup-chart-wrap {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+      }
+
+      /* ── FEATURES ── */
+      .section {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: var(--space-xl) var(--space-md);
+      }
+      .section__eyebrow {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-accent);
+        margin-bottom: 0.6rem;
+      }
+      .section__title {
+        font-family: var(--font-display);
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        margin-bottom: var(--space-lg);
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: var(--space-sm);
+      }
+      .feature-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: var(--space-md);
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s;
+      }
+      .feature-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+      .feature-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-sm);
+        background: var(--color-accent-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.85rem;
+        font-size: 1.15rem;
+      }
+      .feature-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+      }
+      .feature-desc {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+      }
+
+      /* ── HOW IT WORKS ── */
+      .how-section {
+        background: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-md);
+      }
+      .step {
+        position: relative;
+      }
+      .step__num {
+        font-family: var(--font-mono);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--color-accent-light);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+      .step__title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+      }
+      .step__desc {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+      }
+
+      /* ── TECH STACK ── */
+      .tech-section {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: var(--space-xl) var(--space-md);
+      }
+      .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: var(--space-sm);
+      }
+      .tech-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 100px;
+        border: 1px solid var(--color-border);
+        font-size: 0.82rem;
+        background: var(--color-surface);
+        color: var(--color-text-secondary);
+        font-family: var(--font-mono);
+      }
+      .tech-tag--accent {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+        background: var(--color-accent-light);
+      }
+
+      /* ── CTA SECTION ── */
+      .cta-section {
+        text-align: center;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: var(--space-xl) var(--space-md);
+      }
+      .cta-section h2 {
+        font-family: var(--font-display);
+        font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        margin-bottom: var(--space-sm);
+      }
+      .cta-section p {
+        color: var(--color-text-secondary);
+        font-size: 0.95rem;
+        margin-bottom: var(--space-md);
+      }
+
+      /* ── FOOTER ── */
+      .footer {
+        border-top: 1px solid var(--color-border);
+        padding: var(--space-md);
+        text-align: center;
+        font-size: 0.78rem;
+        color: var(--color-text-secondary);
+        font-family: var(--font-mono);
+      }
+
+      /* ── DIVIDER ── */
+      .divider {
+        height: 1px;
+        background: var(--color-border);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="navbar__inner">
+        <a class="navbar__logo" href="#">
+          <span class="navbar__logo-text">Schedule</span>
+          <span class="badge">Shoei451</span>
+        </a>
+        <div style="display: flex; align-items: center; gap: 0.5rem">
+          <a
+            class="btn--ghost"
+            href="https://github.com/Shoei451/schedule_tracker"
+            target="_blank"
+            rel="noopener"
+            style="font-size: 0.85rem; padding: 0.45rem 1rem"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"
+              />
+            </svg>
+            GitHub
+          </a>
+          <a class="navbar__cta" href="home.html">Open Schedule App</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section>
+      <div class="hero">
+        <div class="hero__text">
+          <p class="hero__eyebrow">Weekly Schedule Manager</p>
+          <h1 class="hero__title">
+            1週間を、<br /><span>見渡せる</span>スケジュール
+          </h1>
+          <p class="hero__sub">
+            曜日ごとに予定を登録して、時計型ビューで今の自分の位置を確認。
+            通知・カラー分け・翌日またぎにも対応した、シンプルな週間管理ツール。
+          </p>
+          <div class="hero__actions">
+            <a class="btn--primary" href="home.html">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              Use App now
+            </a>
+            <a class="btn--ghost" href="#features">See Features</a>
+          </div>
+        </div>
+
+        <!-- MOCKUP -->
+        <div class="hero__visual">
+          <div class="mockup-wrap">
+            <div class="mockup-bar">
+              <div style="display: flex; align-items: baseline; gap: 0.4rem">
+                <span class="mockup-bar-brand">Schedule</span>
+                <span class="badge">451-n</span>
+              </div>
+              <span
+                style="font-size: 0.75rem; color: var(--color-text-secondary)"
+                >表示</span
+              >
+            </div>
+            <div class="mockup-body">
+              <div class="mockup-clock">
+                <div class="mockup-clock-time" id="demo-clock">--:--:--</div>
+                <div class="mockup-clock-date" id="demo-date">─</div>
+              </div>
+              <div class="mockup-event">
+                <div class="mockup-event-dot"></div>
+                <div>
+                  <div class="mockup-event-label">英語</div>
+                  <div class="mockup-event-time">09:00 — 10:30</div>
+                </div>
+              </div>
+              <!-- Mini donut chart (JS-drawn) -->
+              <div class="mockup-chart-wrap">
+                <svg
+                  id="demo-chart"
+                  viewBox="0 0 160 160"
+                  width="160"
+                  height="160"
+                ></svg>
+              </div>
+              <!-- Today list mini -->
+              <div style="display: flex; flex-direction: column; gap: 0.35rem">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                    padding: 0.45rem 0.7rem;
+                    background: #faf8ff;
+                    border: 1px solid #e8e4f4;
+                    border-radius: 10px;
+                    border-left: 3px solid #6d28d9;
+                  "
+                >
+                  <span style="font-size: 0.8rem; font-weight: 500; flex: 1"
+                    >英語</span
+                  >
+                  <span
+                    style="
+                      font-size: 0.68rem;
+                      color: #888;
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                    "
+                    >09:00–10:30</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                    padding: 0.45rem 0.7rem;
+                    background: #faf8ff;
+                    border: 1px solid #e8e4f4;
+                    border-radius: 10px;
+                    border-left: 3px solid #2563eb;
+                  "
+                >
+                  <span style="font-size: 0.8rem; font-weight: 500; flex: 1"
+                    >数学</span
+                  >
+                  <span
+                    style="
+                      font-size: 0.68rem;
+                      color: #888;
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                    "
+                    >13:00–15:00</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                    padding: 0.45rem 0.7rem;
+                    background: #faf8ff;
+                    border: 1px solid #e8e4f4;
+                    border-radius: 10px;
+                    border-left: 3px solid #059669;
+                  "
+                >
+                  <span style="font-size: 0.8rem; font-weight: 500; flex: 1"
+                    >自習</span
+                  >
+                  <span
+                    style="
+                      font-size: 0.68rem;
+                      color: #888;
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                    "
+                    >19:00–22:00</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- FEATURES -->
+    <section id="features" class="section">
+      <p class="section__eyebrow">Features</p>
+      <h2 class="section__title">主な機能</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🕐</div>
+          <div class="feature-title">リアルタイム時計 & 現在の予定</div>
+          <p class="feature-desc">
+            秒単位で更新される時計と、今まさに進行中の予定を常に表示。次の予定も一目でわかる。
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🍩</div>
+          <div class="feature-title">24時間ドーナツチャート</div>
+          <p class="feature-desc">
+            1日を円グラフで可視化。時計の針が現在時刻を指し、スケジュール全体の密度が直感的につかめる。
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <div class="feature-title">曜日別・複数曜日一括登録</div>
+          <p class="feature-desc">
+            予定を登録するとき、複数の曜日を同時に選択できる。繰り返し予定を一発で追加。
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌙</div>
+          <div class="feature-title">翌日またぎ対応</div>
+          <p class="feature-desc">
+            終了時刻が開始より前の場合、自動で「翌日まで」と判定。深夜にまたがる勉強・睡眠も正確に管理。
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <div class="feature-title">ブラウザ通知</div>
+          <p class="feature-desc">
+            予定の5分前・10分前・15分前・30分前など、好みのタイミングでブラウザ通知を受け取れる。
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-title">カラー分け</div>
+          <p class="feature-desc">
+            8色から予定ごとに色を選択。チャートとリストが連動して色分けされ、科目や活動が一目でわかる。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+      <div class="section">
+        <p class="section__eyebrow">How It Works</p>
+        <h2 class="section__title">使い方</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step__num">01</div>
+            <div class="step__title">アカウントを作成</div>
+            <p class="step__desc">
+              メールアドレスとパスワードで登録。データはクラウドに保存されるため、どこからでもアクセスできる。
+            </p>
+          </div>
+          <div class="step">
+            <div class="step__num">02</div>
+            <div class="step__title">予定を追加</div>
+            <p class="step__desc">
+              設定タブから時間・ラベル・曜日・色・通知タイミングを入力して追加するだけ。複数曜日に一括登録できる。
+            </p>
+          </div>
+          <div class="step">
+            <div class="step__num">03</div>
+            <div class="step__title">表示タブで確認</div>
+            <p class="step__desc">
+              時計・チャート・今日の予定リストが自動更新。今の予定と次の予定が常にトップに表示される。
+            </p>
+          </div>
+          <div class="step">
+            <div class="step__num">04</div>
+            <div class="step__title">通知を許可して完了</div>
+            <p class="step__desc">
+              ブラウザの通知を許可すれば、予定の直前に自動でアラートが届く。スマホからも使える。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- TECH STACK -->
+    <section class="tech-section">
+      <p class="section__eyebrow">Tech Stack</p>
+      <h2 class="section__title" style="margin-bottom: var(--space-sm)">
+        技術スタック
+      </h2>
+      <p
+        style="
+          font-size: 0.9rem;
+          color: var(--color-text-secondary);
+          max-width: 520px;
+          margin-bottom: var(--space-sm);
+        "
+      >
+        フレームワーク不要。バニラ JS + Supabase
+        だけで動く軽量設計。ページを開くだけで即使える。
+      </p>
+      <div class="tech-tags">
+        <span class="tech-tag tech-tag--accent">HTML / CSS</span>
+        <span class="tech-tag tech-tag--accent">Vanilla JS</span>
+        <span class="tech-tag tech-tag--accent">Supabase</span>
+        <span class="tech-tag">Web Notifications API</span>
+        <span class="tech-tag">SVG Chart</span>
+        <span class="tech-tag">Row Level Security</span>
+        <span class="tech-tag">Responsive Design</span>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <h2>今日から使ってみよう</h2>
+      <p>アカウント登録は無料。登録後すぐに予定を追加できます。</p>
+      <a
+        class="btn--primary"
+        href="home.html"
+        style="font-size: 1rem; padding: 0.9rem 2rem"
+      >
+        Open Schedule App
+      </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <span>Schedule / Shoei451 — built with Supabase &amp; Vanilla JS</span>
+    </footer>
+
+    <script>
+      // ── Chart helpers (same logic as main.js) ──
+      const CX = 80,
+        CY = 80,
+        R = 62,
+        r = 38;
+
+      function polar(cx, cy, radius, deg) {
+        const rad = (deg * Math.PI) / 180;
+        return {
+          x: cx + radius * Math.cos(rad),
+          y: cy + radius * Math.sin(rad),
+        };
+      }
+      function h2deg(h) {
+        return (h / 24) * 360 - 90;
+      }
+      function arcPath(h0, h1) {
+        const a0 = h2deg(h0),
+          a1 = h2deg(h1);
+        let span = a1 - a0;
+        if (span <= 0) span += 360;
+        const lg = span > 180 ? 1 : 0;
+        const p = (R2, a) => {
+          const pt = polar(CX, CY, R2, a);
+          return `${pt.x.toFixed(2)},${pt.y.toFixed(2)}`;
+        };
+        return `M ${p(R, a0)} A ${R} ${R} 0 ${lg} 1 ${p(R, a1)} L ${p(r, a1)} A ${r} ${r} 0 ${lg} 0 ${p(r, a0)} Z`;
+      }
+      function nowHour() {
+        const n = new Date();
+        return n.getHours() + n.getMinutes() / 60 + n.getSeconds() / 3600;
+      }
+
+      const DEMO_SLOTS = [
+        { start: 9, end: 10.5, color: "#6d28d9" },
+        { start: 13, end: 15, color: "#2563eb" },
+        { start: 19, end: 22, color: "#059669" },
+      ];
+
+      function drawDemoChart() {
+        const svg = document.getElementById("demo-chart");
+        let html = "";
+
+        // Track
+        html += `<circle cx="${CX}" cy="${CY}" r="${(R + r) / 2}" fill="none" stroke="#e8e4f4" stroke-width="${R - r}"/>`;
+
+        // Slot arcs
+        for (const s of DEMO_SLOTS) {
+          html += `<path d="${arcPath(s.start, s.end)}" fill="${s.color}" opacity="0.9"/>`;
+        }
+
+        // Tick marks & labels
+        [0, 6, 12, 18].forEach((h) => {
+          const deg = h2deg(h);
+          const p1 = polar(CX, CY, R + 4, deg),
+            p2 = polar(CX, CY, R + 10, deg),
+            pt = polar(CX, CY, R + 18, deg);
+          html += `<line x1="${p1.x.toFixed(2)}" y1="${p1.y.toFixed(2)}" x2="${p2.x.toFixed(2)}" y2="${p2.y.toFixed(2)}" stroke="#ccc" stroke-width="1.3" stroke-linecap="round"/>`;
+          html += `<text x="${pt.x.toFixed(2)}" y="${pt.y.toFixed(2)}" text-anchor="middle" dominant-baseline="middle" font-size="7.5" fill="#aaa" font-family="JetBrains Mono,monospace">${h}</text>`;
+        });
+
+        // Hand placeholder (updated by updateDemoClock)
+        html += `<line id="demo-hand" x1="${CX}" y1="${CY}" x2="${CX}" y2="${CX}" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>`;
+        html += `<circle cx="${CX}" cy="${CY}" r="3" fill="#1a1a1a"/>`;
+
+        svg.innerHTML = html;
+      }
+
+      // ── Clock ──
+      const DAYS = ["日", "月", "火", "水", "木", "金", "土"];
+      function updateDemoClock() {
+        const now = new Date();
+        document.getElementById("demo-clock").textContent =
+          now.toLocaleTimeString("ja-JP", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          });
+        document.getElementById("demo-date").textContent =
+          `${now.getMonth() + 1}月${now.getDate()}日（${DAYS[now.getDay()]}）`;
+
+        const p = polar(CX, CY, (R + r) / 2 - 2, h2deg(nowHour()));
+        const hand = document.getElementById("demo-hand");
+        if (hand) {
+          hand.setAttribute("x2", p.x.toFixed(2));
+          hand.setAttribute("y2", p.y.toFixed(2));
+        }
+      }
+
+      drawDemoChart();
+      updateDemoClock();
+      setInterval(updateDemoClock, 1000);
+    </script>
+  </body>
+</html>
