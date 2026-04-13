@@ -182,12 +182,12 @@
 }
 
 .tt-cell-icon svg {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
 }
 
 .tt-cell-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--color-text-primary);
   text-align: center;
@@ -353,12 +353,12 @@
   }
 
   .tt-cell-label {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .tt-cell-icon svg {
-    width: 12px;
-    height: 12px;
+    width: 15px;
+    height: 15px;
   }
 
   .tt-popover {
