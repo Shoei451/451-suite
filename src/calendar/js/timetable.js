@@ -19,8 +19,6 @@ const SUBJECT_ICON_MAP = {
   数学: "bi-calculator",
   英語: "bi-translate",
   国語: "bi-book",
-  現代文: "bi-book",
-  古典: "bi-book",
   世界史: "bi-globe",
   地理: "bi-geo-alt",
   物理: "bi-lightning",
