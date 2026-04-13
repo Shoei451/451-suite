@@ -156,6 +156,7 @@ function onOutsideClick(e) {
 
 function closePopover() {
   if (activePopover) {
+    activePopover._backdrop?.remove();
     activePopover.remove();
     activePopover = null;
   }
@@ -192,8 +193,36 @@ function openCellEditor(cellEl, dow, period) {
     })
     .join("");
 
+  // 既存の科目一覧を収集（重複排除・空除外）
+  const usedSubjects = [...new Set(
+    [...cells.values()]
+      .map((c) => c.subject)
+      .filter(Boolean)
+  )];
+
+  const usedSubjectChips = usedSubjects.length
+    ? `<div class="tt-popover-label" style="margin-bottom:4px;">登録済みの科目</div>
+       <div class="tt-used-subjects">
+         ${usedSubjects.map((s) => `<button type="button" class="tt-subject-chip" data-subject="${s}">${s}</button>`).join("")}
+       </div>`
+    : "";
+  const maxPeriod = getMaxPeriod();
+  const dayOptions = DAY_LABELS.map((label, i) =>
+    `<option value="${i}"${i === dow ? " selected" : ""}>${label}</option>`
+  ).join("");
+  const periodOptions = Array.from({ length: maxPeriod }, (_, i) =>
+    `<option value="${i + 1}"${i + 1 === period ? " selected" : ""}>${i + 1}限</option>`
+  ).join("");
+
   popover.innerHTML = `
     <form class="tt-popover-form" autocomplete="off">
+      <div class="tt-popover-header">
+        <div class="tt-cell-selector">
+          <select class="tt-select" id="tt-sel-dow">${dayOptions}</select>
+          <select class="tt-select" id="tt-sel-period">${periodOptions}</select>
+        </div>
+        <button type="button" class="tt-popover-close">✕</button>
+      </div>
       <label class="tt-popover-label">
         科目名
         <input
@@ -211,41 +240,32 @@ function openCellEditor(cellEl, dow, period) {
       .join("")}
         </datalist>
       </label>
+      ${usedSubjectChips}
       <div class="tt-icon-grid">
         ${iconOptions}
       </div>
       <div class="tt-popover-actions">
-        <button type="button" class="tt-btn-cancel">キャンセル</button>
-        <button type="button" class="tt-btn-clear">クリア</button>
-        <button type="submit" class="tt-btn-save primary">保存</button>
+        <button type="button" class="tt-btn-cancel">Cancel</button>
+        <button type="button" class="tt-btn-clear">clear</button>
+        <button type="submit" class="tt-btn-save primary">save</button>
       </div>
     </form>
   `;
 
-  // Position near the cell
-  const rect = cellEl.getBoundingClientRect();
-  const scrollY = window.scrollY;
-  popover.style.position = "absolute";
+  // 中央固定
+  popover.style.position = "fixed";
+  popover.style.left = "50%";
+  popover.style.top = "50%";
+  popover.style.transform = "translate(-50%, -50%)";
 
+  // backdrop
+  const backdrop = document.createElement("div");
+  backdrop.className = "tt-popover-backdrop";
+  backdrop.addEventListener("click", closePopover);
+  document.body.appendChild(backdrop);
   document.body.appendChild(popover);
   activePopover = popover;
-
-  // Adjust position after render
-  const pw = popover.offsetWidth;
-  const ph = popover.offsetHeight;
-  const vw = window.innerWidth;
-
-  let left = rect.left + window.scrollX;
-  let top = rect.bottom + scrollY + 4;
-
-  if (left + pw > vw - 8) left = vw - pw - 8;
-  if (left < 8) left = 8;
-  if (top + ph > scrollY + window.innerHeight - 8) {
-    top = rect.top + scrollY - ph - 4;
-  }
-
-  popover.style.left = `${left}px`;
-  popover.style.top = `${top}px`;
+  activePopover._backdrop = backdrop;
 
   // Auto-suggest icon when subject typed
   const input = popover.querySelector(".tt-popover-input");
@@ -264,6 +284,16 @@ function openCellEditor(cellEl, dow, period) {
     if (suggested) updateSelectedIcon(suggested);
   });
 
+  // 登録済み科目チップのクリックで入力欄に反映
+  popover.querySelectorAll(".tt-subject-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      input.value = chip.dataset.subject;
+      const suggested = SUBJECT_ICON_MAP[chip.dataset.subject];
+      if (suggested) updateSelectedIcon(suggested);
+      input.focus();
+    });
+  });
+
   popover.querySelectorAll(".tt-icon-btn").forEach((btn) => {
     btn.addEventListener("click", () => updateSelectedIcon(btn.dataset.icon));
   });
@@ -272,34 +302,52 @@ function openCellEditor(cellEl, dow, period) {
     .querySelector(".tt-btn-cancel")
     .addEventListener("click", closePopover);
 
+
+  // 閉じるボタン
+  popover.querySelector(".tt-popover-close").addEventListener("click", closePopover);
+
+  // 曜日・時限セレクター変更 → ターゲットセルを切り替え
+  let currentDow = dow;
+  let currentPeriod = period;
+
+  popover.querySelector("#tt-sel-dow").addEventListener("change", (e) => {
+    currentDow = parseInt(e.target.value);
+    const k = cellKey(currentDow, currentPeriod);
+    const c = cells.get(k) || { subject: "", icon_key: "" };
+    input.value = c.subject;
+    updateSelectedIcon(c.icon_key || "");
+  });
+
+  popover.querySelector("#tt-sel-period").addEventListener("change", (e) => {
+    currentPeriod = parseInt(e.target.value);
+    const k = cellKey(currentDow, currentPeriod);
+    const c = cells.get(k) || { subject: "", icon_key: "" };
+    input.value = c.subject;
+    updateSelectedIcon(c.icon_key || "");
+  });
+
+  // saveとclearのターゲットをcurrentDow/currentPeriodに差し替え
   popover.querySelector(".tt-btn-clear").addEventListener("click", async () => {
     closePopover();
     try {
-      await saveTimetableCell(dow, period, "", "");
+      await saveTimetableCell(currentDow, currentPeriod, "", "");
       renderGrid();
     } catch (err) {
       alert("削除に失敗しました: " + err.message);
     }
   });
 
-  popover
-    .querySelector(".tt-popover-form")
-    .addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const subject = input.value.trim();
-      closePopover();
-      try {
-        await saveTimetableCell(dow, period, subject, selectedIcon);
-        renderGrid();
-      } catch (err) {
-        alert("保存に失敗しました: " + err.message);
-      }
-    });
-
-  // Close on outside click
-  setTimeout(() => {
-    document.addEventListener("click", onOutsideClick);
-  }, 0);
+  popover.querySelector(".tt-popover-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const subject = input.value.trim();
+    closePopover();
+    try {
+      await saveTimetableCell(currentDow, currentPeriod, subject, selectedIcon);
+      renderGrid();
+    } catch (err) {
+      alert("保存に失敗しました: " + err.message);
+    }
+  });
 
   // Focus input
   input.focus();
