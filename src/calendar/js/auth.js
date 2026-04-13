@@ -1,4 +1,4 @@
-import { supabaseClient } from "./config.js";
+import { db as supabaseClient } from "../../supabase_config.js";
 import { state } from "./state.js";
 import {
   loadRemoteEvents,

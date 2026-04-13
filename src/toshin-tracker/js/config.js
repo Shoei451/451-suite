@@ -1,1 +1,0 @@
-export { db, T } from "../../supabase_config.js";

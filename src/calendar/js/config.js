@@ -1,1 +1,0 @@
-export { db as supabaseClient, T } from "../../supabase_config.js";

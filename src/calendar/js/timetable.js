@@ -7,7 +7,7 @@
  */
 
 import { state } from "./state.js";
-import { supabaseClient } from "./config.js";
+import { db as supabaseClient, tables } from "../../supabase_config.js";
 import { getIcon } from "./icons.js";
 
 // ── Constants ────────────────────────────────────────────────
@@ -66,7 +66,7 @@ async function loadTimetable() {
   try {
     // ← try/finally で確実にフラグリセット
     const { data, error } = await supabaseClient
-      .from("calendar_timetable")
+      .from(tables.CALENDAR_TIMETABLE)
       .select("id, day_of_week, period, subject, icon_key")
       .eq("user_id", state.user.id);
 
@@ -99,7 +99,7 @@ async function saveTimetableCell(dow, period, subject, icon_key) {
     // Delete
     if (existing?.id) {
       const { error } = await supabaseClient
-        .from("calendar_timetable")
+        .from(tables.CALENDAR_TIMETABLE)
         .delete()
         .eq("id", existing.id);
       if (error) throw error;
@@ -119,7 +119,7 @@ async function saveTimetableCell(dow, period, subject, icon_key) {
   if (existing?.id) {
     // Update
     const { data, error } = await supabaseClient
-      .from("calendar_timetable")
+      .from(tables.CALENDAR_TIMETABLE)
       .update({ subject: payload.subject, icon_key: payload.icon_key })
       .eq("id", existing.id)
       .select("id")
@@ -134,7 +134,7 @@ async function saveTimetableCell(dow, period, subject, icon_key) {
   } else {
     // Insert
     const { data, error } = await supabaseClient
-      .from("calendar_timetable")
+      .from(tables.CALENDAR_TIMETABLE)
       .insert(payload)
       .select("id")
       .single();

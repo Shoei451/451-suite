@@ -4,6 +4,7 @@ import { hasCloud, setSyncStatus, clearAllCloud } from "./cloud.js";
 import { initAuth } from "./auth.js";
 import { initTabs } from "./tabs.js";
 import { initTimetable } from "./timetable.js";
+import { db as supabaseClient, tables } from "../../supabase_config.js";
 
 $("#filterCourse").onchange = (e) => {
   state.filterCourse = e.target.value;
@@ -43,13 +44,12 @@ $("#importFile").onchange = async (e) => {
     //storage.set(state.events);
     if (hasCloud()) {
       setSyncStatus("同期中...");
-      const { supabaseClient } = await import("./config.js");
       const payload = state.events.map((ev) => ({
         ...ev,
         user_id: state.user.id,
       }));
       const { error } = await supabaseClient
-        .from("calendar_app")
+        .from(tables.CALENDAR_APP)
         .upsert(payload);
       if (error) throw error;
       setSyncStatus(`同期済み（${state.events.length}件）`);

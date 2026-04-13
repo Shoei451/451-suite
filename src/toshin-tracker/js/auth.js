@@ -1,4 +1,4 @@
-import { db } from "./config.js";
+import { db } from "../../supabase_config.js";
 import { state } from "./state.js";
 
 let _onLoginCallback = null;

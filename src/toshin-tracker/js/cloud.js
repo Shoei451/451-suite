@@ -1,13 +1,10 @@
-// 変更後
-import { db } from "./config.js"; // config.js は T を再エクスポートする
-import { T } from "../../supabase_config.js";
-db.from(T.TOSHIN_COURSES).select("*");
-import { state, uid, formatDate, showToast } from "./state.js";
+import { db, tables } from "../../supabase_config.js";
+import { state, uid, formatDate } from "./state.js";
 
 // ── Courses ──────────────────────────────────────────────────
 export async function fetchCourses() {
   const { data, error } = await db
-    .from("toshin_courses")
+    .from(tables.TOSHIN_COURSES)
     .select("*")
     .eq("user_id", state.user.id)
     .order("created_at", { ascending: true });
@@ -23,7 +20,7 @@ export async function addCourse({ name, subject, total_units }) {
     subject,
     total_units: Number(total_units),
   };
-  const { error } = await db.from("toshin_courses").insert(row);
+  const { error } = await db.from(tables.TOSHIN_COURSES).insert(row);
   if (error) throw error;
   // コマを total_units 分自動生成
   await ensureUnits(row.id, Number(total_units));
@@ -32,7 +29,10 @@ export async function addCourse({ name, subject, total_units }) {
 }
 
 export async function deleteCourse(courseId) {
-  const { error } = await db.from("toshin_courses").delete().eq("id", courseId);
+  const { error } = await db
+    .from(tables.TOSHIN_COURSES)
+    .delete()
+    .eq("id", courseId);
   if (error) throw error;
   state.courses = state.courses.filter((c) => c.id !== courseId);
   state.units = state.units.filter((u) => u.course_id !== courseId);
@@ -44,7 +44,7 @@ export async function fetchUnits() {
   if (!state.courses.length) return;
   const courseIds = state.courses.map((c) => c.id);
   const { data, error } = await db
-    .from("toshin_units")
+    .from(tables.TOSHIN_UNITS)
     .select("*")
     .in("course_id", courseIds)
     .order("unit_number", { ascending: true });
@@ -69,7 +69,7 @@ export async function ensureUnits(courseId, totalUnits) {
     }
   }
   if (toInsert.length) {
-    const { error } = await db.from("toshin_units").insert(toInsert);
+    const { error } = await db.from(tables.TOSHIN_UNITS).insert(toInsert);
     if (error) throw error;
     state.units.push(...toInsert);
   }
@@ -84,7 +84,7 @@ export async function toggleUnitComplete(unitId) {
     completed_at: newVal ? formatDate(new Date()) : null,
   };
   const { error } = await db
-    .from("toshin_units")
+    .from(tables.TOSHIN_UNITS)
     .update(update)
     .eq("id", unitId);
   if (error) throw error;
@@ -116,7 +116,7 @@ export async function setUnitScheduledDate(unitId, date) {
     calendar_event_id: calendarEventId,
   };
   const { error } = await db
-    .from("toshin_units")
+    .from(tables.TOSHIN_UNITS)
     .update(update)
     .eq("id", unitId);
   if (error) throw error;
@@ -129,7 +129,7 @@ export async function fetchGoals() {
   if (!state.courses.length) return;
   const courseIds = state.courses.map((c) => c.id);
   const { data, error } = await db
-    .from("toshin_monthly_goals")
+    .from(tables.TOSHIN_MONTHLY_GOALS)
     .select("*")
     .in("course_id", courseIds);
   if (error) throw error;
@@ -142,7 +142,7 @@ export async function upsertGoal(courseId, yearMonth, goalUnits) {
   );
   if (existing) {
     const { error } = await db
-      .from("toshin_monthly_goals")
+      .from(tables.TOSHIN_MONTHLY_GOALS)
       .update({ goal_units: goalUnits })
       .eq("id", existing.id);
     if (error) throw error;
@@ -154,7 +154,7 @@ export async function upsertGoal(courseId, yearMonth, goalUnits) {
       year_month: yearMonth,
       goal_units: goalUnits,
     };
-    const { error } = await db.from("toshin_monthly_goals").insert(row);
+    const { error } = await db.from(tables.TOSHIN_MONTHLY_GOALS).insert(row);
     if (error) throw error;
     state.goals.push(row);
   }
@@ -163,7 +163,7 @@ export async function upsertGoal(courseId, yearMonth, goalUnits) {
 // ── Masters ──────────────────────────────────────────────────
 export async function fetchMasters() {
   const { data, error } = await db
-    .from("toshin_masters")
+    .from(tables.TOSHIN_MASTERS)
     .select("*")
     .order("display_order", { ascending: true });
   if (error) throw error;
@@ -172,7 +172,7 @@ export async function fetchMasters() {
 
 export async function fetchStages() {
   const { data, error } = await db
-    .from("toshin_master_stages")
+    .from(tables.TOSHIN_MASTER_STAGES)
     .select("*")
     .order("stage_number", { ascending: true });
   if (error) throw error;
@@ -181,7 +181,7 @@ export async function fetchStages() {
 
 export async function fetchProgress() {
   const { data, error } = await db
-    .from("toshin_master_progress")
+    .from(tables.TOSHIN_MASTER_PROGRESS)
     .select("*")
     .eq("user_id", state.user.id);
   if (error) throw error;
@@ -197,7 +197,7 @@ export async function toggleStageComplete(stageId) {
       completed_at: newVal ? formatDate(new Date()) : null,
     };
     const { error } = await db
-      .from("toshin_master_progress")
+      .from(tables.TOSHIN_MASTER_PROGRESS)
       .update(update)
       .eq("id", prog.id);
     if (error) throw error;
@@ -211,7 +211,7 @@ export async function toggleStageComplete(stageId) {
       is_completed: true,
       completed_at: formatDate(new Date()),
     };
-    const { error } = await db.from("toshin_master_progress").insert(row);
+    const { error } = await db.from(tables.TOSHIN_MASTER_PROGRESS).insert(row);
     if (error) throw error;
     state.progress.push(row);
     return row;
@@ -222,7 +222,7 @@ export async function setStageMonthGoal(stageId, yearMonth) {
   const prog = state.progress.find((p) => p.stage_id === stageId);
   if (prog) {
     const { error } = await db
-      .from("toshin_master_progress")
+      .from(tables.TOSHIN_MASTER_PROGRESS)
       .update({ year_month_goal: yearMonth })
       .eq("id", prog.id);
     if (error) throw error;
@@ -236,7 +236,7 @@ export async function setStageMonthGoal(stageId, yearMonth) {
       is_completed: false,
       year_month_goal: yearMonth,
     };
-    const { error } = await db.from("toshin_master_progress").insert(row);
+    const { error } = await db.from(tables.TOSHIN_MASTER_PROGRESS).insert(row);
     if (error) throw error;
     state.progress.push(row);
     return row;
@@ -247,7 +247,7 @@ export async function setStageMonthGoal(stageId, yearMonth) {
 export async function fetchExams() {
   // calendar_appテーブルから東進模試のみfetch
   const { data, error } = await db
-    .from("calendar_app")
+    .from(tables.CALENDAR_APP)
     .select("id, date, title, notes")
     .eq("user_id", state.user.id)
     .eq("type", "東進模試")
@@ -258,7 +258,7 @@ export async function fetchExams() {
 
 export async function insertCalendarEvent({ date, title, course }) {
   const eventId = uid();
-  const { error } = await db.from("calendar_app").insert({
+  const { error } = await db.from(tables.CALENDAR_APP).insert({
     id: eventId,
     user_id: state.user.id,
     date,
@@ -275,7 +275,7 @@ export async function insertCalendarEvent({ date, title, course }) {
 export async function deleteCalendarEvent(eventId) {
   if (!eventId) return;
   const { error } = await db
-    .from("calendar_app")
+    .from(tables.CALENDAR_APP)
     .delete()
     .eq("id", eventId)
     .eq("user_id", state.user.id);

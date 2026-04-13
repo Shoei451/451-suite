@@ -6,14 +6,14 @@ const SUPABASE_KEY = "sb_publishable_uZuTU24T38xW7iAsXJIQ-g_OfuLjyjJ";
 export const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── Table name registry ──────────────────────────────────────
-// All table names are defined here. Import and use T.XXX instead of
+// All table names are defined here. Import and use tables.XXX instead of
 // writing raw strings in application code.
 //
 // Usage:
-//   import { T } from "../../supabase_config.js";
-//   db.from(T.CALENDAR_APP).select("*")
+//   import { tables } from "../../supabase_config.js";
+//   db.from(tables.CALENDAR_APP).select("*")
 //
-export const T = {
+export const tables = {
   // ── calendar app ──────────────────────────────────────────
   CALENDAR_APP: "calendar_app",
   CALENDAR_TIMETABLE: "calendar_timetable",
@@ -29,7 +29,3 @@ export const T = {
   // ── schedule tracker ──────────────────────────────────────
   WEEKLY_SCHEDULE: "weekly_schedule",
 };
-
-// Legacy alias — kept for backward compatibility during migration.
-// Prefer T going forward.
-export const tables = T;

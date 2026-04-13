@@ -1,4 +1,4 @@
-import { supabaseClient } from "./config.js";
+import { db as supabaseClient, tables } from "../../supabase_config.js";
 import { state } from "./state.js";
 
 let syncChannel = null;
@@ -38,7 +38,7 @@ export async function loadRemoteEvents() {
   setSyncStatus("syncing...");
   try {
     const { data, error } = await supabaseClient
-      .from("calendar_app")
+      .from(tables.CALENDAR_APP)
       .select("*")
       .eq("user_id", state.user.id)
       .order("date", { ascending: true });
@@ -58,7 +58,7 @@ export async function loadRemoteEvents() {
 export async function saveEventCloud(event) {
   if (!hasCloud()) return;
   const { error } = await supabaseClient
-    .from("calendar_app")
+    .from(tables.CALENDAR_APP)
     .upsert(toCloudPayload(event));
   if (error) throw error;
 }
@@ -66,7 +66,7 @@ export async function saveEventCloud(event) {
 export async function deleteEventCloud(id) {
   if (!hasCloud() || !id) return;
   const { error } = await supabaseClient
-    .from("calendar_app")
+    .from(tables.CALENDAR_APP)
     .delete()
     .eq("id", id)
     .eq("user_id", state.user.id);
@@ -76,7 +76,7 @@ export async function deleteEventCloud(id) {
 export async function deleteGroupCloud(groupId) {
   if (!hasCloud() || !groupId) return;
   const { error } = await supabaseClient
-    .from("calendar_app")
+    .from(tables.CALENDAR_APP)
     .delete()
     .eq("group_id", groupId)
     .eq("user_id", state.user.id);
@@ -86,7 +86,7 @@ export async function deleteGroupCloud(groupId) {
 export async function updateGroupCloud(groupId, updates) {
   if (!hasCloud() || !groupId) return;
   const { error } = await supabaseClient
-    .from("calendar_app")
+    .from(tables.CALENDAR_APP)
     .update({
       title: updates.title,
       course: updates.course,
@@ -101,7 +101,7 @@ export async function updateGroupCloud(groupId, updates) {
 export async function clearAllCloud() {
   if (!hasCloud()) return;
   const { error } = await supabaseClient
-    .from("calendar_app")
+    .from(tables.CALENDAR_APP)
     .delete()
     .eq("user_id", state.user.id);
   if (error) throw error;
@@ -120,7 +120,7 @@ export function subscribeRealtime(onUpdate) {
       {
         event: "*",
         schema: "public",
-        table: "calendar_app",
+        table: tables.CALENDAR_APP,
         filter: `user_id=eq.${state.user.id}`,
       },
       onUpdate,
@@ -139,7 +139,7 @@ export function unsubscribeRealtime() {
 export async function deleteRepeatGroupCloud(repeatGroupId) {
   if (!hasCloud() || !repeatGroupId) return;
   const { error } = await supabaseClient
-    .from("calendar_app")
+    .from(tables.CALENDAR_APP)
     .delete()
     .eq("repeat_group_id", repeatGroupId)
     .eq("user_id", state.user.id);
@@ -150,7 +150,7 @@ export async function deleteRepeatGroupCloud(repeatGroupId) {
 export async function loadTimetableCloud(userId) {
   if (!supabaseClient || !userId) return [];
   const { data, error } = await supabaseClient
-    .from("calendar_timetable")
+    .from(tables.CALENDAR_TIMETABLE)
     .select("id, day_of_week, period, subject, icon_key")
     .eq("user_id", userId);
   if (error) throw error;
