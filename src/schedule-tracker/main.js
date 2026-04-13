@@ -629,7 +629,10 @@ function checkNotifBanner() {
 }
 
 async function bootApp() {
-  if (!user) return;
+  if (!user) {
+    console.warn("bootApp: user is null, aborting");
+    return;
+  }
   await fetchSlots();
   document.getElementById("app").style.display = "flex";
   renderAll();
@@ -658,30 +661,28 @@ function switchTab(name) {
 // ============================================================
 // INIT
 // ============================================================
-document.addEventListener("DOMContentLoaded", async () => {
-  // Tab switching (bottom bar + navbar tabs)
-  document
-    .querySelectorAll(".tab-btn, .navbar-tab")
-    .forEach((btn) =>
-      btn.addEventListener("click", () => switchTab(btn.dataset.tab)),
-    );
+document.querySelectorAll(".tab-btn, .navbar-tab").forEach((btn) =>
+  btn.addEventListener("click", () => switchTab(btn.dataset.tab))
+);
 
-  document.getElementById("btn-signout").addEventListener("click", async () => {
-    clearInterval(clockTick);
-    clearNotifTimers();
-    await signOutAndRedirect();
-  });
-
-  document
-    .getElementById("btn-allow-notif")
-    .addEventListener("click", requestNotifPermission);
-  document
-    .getElementById("btn-allow-notif-sb")
-    .addEventListener("click", requestNotifPermission);
-  document.getElementById("btn-add").addEventListener("click", addSlot);
-  document
-    .getElementById("btn-cancel-edit")
-    .addEventListener("click", cancelEdit);
-
-  await bootApp();
+document.getElementById("btn-signout").addEventListener("click", async () => {
+  clearInterval(clockTick);
+  clearNotifTimers();
+  await signOutAndRedirect();
 });
+
+document.getElementById("btn-allow-notif").addEventListener("click", requestNotifPermission);
+document.getElementById("btn-allow-notif-sb").addEventListener("click", requestNotifPermission);
+document.getElementById("btn-add").addEventListener("click", addSlot);
+document.getElementById("btn-cancel-edit").addEventListener("click", cancelEdit);
+
+try {
+  await bootApp();
+} catch (err) {
+  console.error("bootApp failed:", err);
+  document.getElementById("app").style.display = "flex";
+  // エラー内容をUIに表示
+  document.getElementById("clock-time").textContent = "Error";
+  document.getElementById("clock-date").textContent = err.message;
+}
+;

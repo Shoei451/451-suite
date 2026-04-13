@@ -192,48 +192,45 @@ function openGoalModal(stageId) {
   document.getElementById("goal-modal").showModal();
 }
 
-// ── Event wiring ──────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", () => {
-  // Month selector (KPI filter)
-  const monthSel = document.getElementById("month-select");
-  if (monthSel) {
-    const now = new Date();
-    for (let i = -1; i <= 5; i++) {
-      const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-      const ym = formatYearMonth(d);
-      const opt = document.createElement("option");
-      opt.value = ym;
-      opt.textContent = `${d.getFullYear()}年${d.getMonth() + 1}月`;
-      if (ym === currentMonth) opt.selected = true;
-      monthSel.appendChild(opt);
-    }
-    monthSel.addEventListener("change", () => {
-      currentMonth = monthSel.value;
-      renderAll();
-    });
+// Month selector (KPI filter)
+const monthSel = document.getElementById("month-select");
+if (monthSel) {
+  const now = new Date();
+  for (let i = -1; i <= 5; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    const ym = formatYearMonth(d);
+    const opt = document.createElement("option");
+    opt.value = ym;
+    opt.textContent = `${d.getFullYear()}年${d.getMonth() + 1}月`;
+    if (ym === currentMonth) opt.selected = true;
+    monthSel.appendChild(opt);
   }
-
-  // Goal modal save
-  document
-    .getElementById("goal-modal-save")
-    ?.addEventListener("click", async () => {
-      const modal = document.getElementById("goal-modal");
-      const stageId = modal.dataset.stageId;
-      const ym = document.getElementById("goal-month-select").value;
-      try {
-        await setStageMonthGoal(stageId, ym || null);
-        modal.close();
-        renderAll();
-        showToast("月目標を設定しました", "success");
-      } catch (e) {
-        showToast("保存に失敗しました", "error");
-      }
-    });
-
-  // Close modals
-  document.querySelectorAll(".modal-close").forEach((btn) => {
-    btn.addEventListener("click", () => btn.closest("dialog")?.close());
+  monthSel.addEventListener("change", () => {
+    currentMonth = monthSel.value;
+    renderAll();
   });
+}
+
+// Goal modal save
+document
+  .getElementById("goal-modal-save")
+  ?.addEventListener("click", async () => {
+    const modal = document.getElementById("goal-modal");
+    const stageId = modal.dataset.stageId;
+    const ym = document.getElementById("goal-month-select").value;
+    try {
+      await setStageMonthGoal(stageId, ym || null);
+      modal.close();
+      renderAll();
+      showToast("月目標を設定しました", "success");
+    } catch (e) {
+      showToast("保存に失敗しました", "error");
+    }
+  });
+
+// Close modals
+document.querySelectorAll(".modal-close").forEach((btn) => {
+  btn.addEventListener("click", () => btn.closest("dialog")?.close());
 });
 
 init();

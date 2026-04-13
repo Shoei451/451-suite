@@ -127,9 +127,8 @@ function renderCourseProgress() {
         <div class="progress-bar">
           <div class="progress-fill${pct === 100 ? " done" : pct < 30 ? " warn" : ""}" style="width:${pct}%"></div>
         </div>
-        ${
-          g
-            ? `
+        ${g
+          ? `
         <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <span style="font-size:12px;color:var(--ink-3)">${ym.replace("-", "年")}月の目標</span>
@@ -140,7 +139,7 @@ function renderCourseProgress() {
           </div>
         </div>
         `
-            : ""
+          : ""
         }
       </div>
     `;
@@ -238,66 +237,64 @@ function openAddCourseModal() {
   document.getElementById("course-name-input").focus();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Month selector
-  const sel = document.getElementById("month-select");
-  if (sel) {
-    // Populate options (current month ±6)
-    const now = new Date();
-    for (let i = -2; i <= 6; i++) {
-      const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-      const ym = formatYearMonth(d);
-      const opt = document.createElement("option");
-      opt.value = ym;
-      opt.textContent = `${d.getFullYear()}年${d.getMonth() + 1}月`;
-      if (ym === state.currentMonth) opt.selected = true;
-      sel.appendChild(opt);
-    }
-    sel.addEventListener("change", () => {
-      state.currentMonth = sel.value;
-      renderKPI();
-      renderCourseProgress();
-      renderMonthlyGoals();
-    });
+// Month selector
+const sel = document.getElementById("month-select");
+if (sel) {
+  // Populate options (current month ±6)
+  const now = new Date();
+  for (let i = -2; i <= 6; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    const ym = formatYearMonth(d);
+    const opt = document.createElement("option");
+    opt.value = ym;
+    opt.textContent = `${d.getFullYear()}年${d.getMonth() + 1}月`;
+    if (ym === state.currentMonth) opt.selected = true;
+    sel.appendChild(opt);
   }
-
-  // Add course button
-  document
-    .getElementById("add-course-btn")
-    ?.addEventListener("click", openAddCourseModal);
-
-  // Add course form submit
-  document
-    .getElementById("add-course-form")
-    ?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = document.getElementById("course-name-input").value.trim();
-      const subject = document
-        .getElementById("course-subject-input")
-        .value.trim();
-      const total_units = Number(
-        document.getElementById("course-units-input").value,
-      );
-      if (!name || !subject || !total_units) return;
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true;
-      try {
-        await addCourse({ name, subject, total_units });
-        document.getElementById("add-course-modal").close();
-        e.target.reset();
-        renderAll();
-        showToast("講座を追加しました", "success");
-      } catch (err) {
-        showToast("追加に失敗しました: " + err.message, "error");
-      } finally {
-        btn.disabled = false;
-      }
-    });
-
-  // Close modal buttons
-  document.querySelectorAll(".modal-close").forEach((btn) => {
-    btn.addEventListener("click", () => btn.closest("dialog")?.close());
+  sel.addEventListener("change", () => {
+    state.currentMonth = sel.value;
+    renderKPI();
+    renderCourseProgress();
+    renderMonthlyGoals();
   });
+}
+
+// Add course button
+document
+  .getElementById("add-course-btn")
+  ?.addEventListener("click", openAddCourseModal);
+
+// Add course form submit
+document
+  .getElementById("add-course-form")
+  ?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("course-name-input").value.trim();
+    const subject = document
+      .getElementById("course-subject-input")
+      .value.trim();
+    const total_units = Number(
+      document.getElementById("course-units-input").value,
+    );
+    if (!name || !subject || !total_units) return;
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    try {
+      await addCourse({ name, subject, total_units });
+      document.getElementById("add-course-modal").close();
+      e.target.reset();
+      renderAll();
+      showToast("講座を追加しました", "success");
+    } catch (err) {
+      showToast("追加に失敗しました: " + err.message, "error");
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+// Close modal buttons
+document.querySelectorAll(".modal-close").forEach((btn) => {
+  btn.addEventListener("click", () => btn.closest("dialog")?.close());
 });
 
 // Start

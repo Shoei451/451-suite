@@ -246,28 +246,27 @@ function openDayModal(dateStr, events) {
 }
 
 // ── Navigation ────────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("prev-btn").addEventListener("click", () => {
-    const d = new Date(currentYear, currentMonth - 1, 1);
-    currentYear = d.getFullYear();
-    currentMonth = d.getMonth();
-    render();
-  });
-  document.getElementById("next-btn").addEventListener("click", () => {
-    const d = new Date(currentYear, currentMonth + 1, 1);
-    currentYear = d.getFullYear();
-    currentMonth = d.getMonth();
-    render();
-  });
-  document.getElementById("today-btn").addEventListener("click", () => {
-    currentYear = new Date().getFullYear();
-    currentMonth = new Date().getMonth();
-    render();
-  });
 
-  document.querySelectorAll(".modal-close").forEach((btn) => {
-    btn.addEventListener("click", () => btn.closest("dialog")?.close());
-  });
+document.getElementById("prev-btn").addEventListener("click", () => {
+  const d = new Date(currentYear, currentMonth - 1, 1);
+  currentYear = d.getFullYear();
+  currentMonth = d.getMonth();
+  render();
+});
+document.getElementById("next-btn").addEventListener("click", () => {
+  const d = new Date(currentYear, currentMonth + 1, 1);
+  currentYear = d.getFullYear();
+  currentMonth = d.getMonth();
+  render();
+});
+document.getElementById("today-btn").addEventListener("click", () => {
+  currentYear = new Date().getFullYear();
+  currentMonth = new Date().getMonth();
+  render();
+});
+
+document.querySelectorAll(".modal-close").forEach((btn) => {
+  btn.addEventListener("click", () => btn.closest("dialog")?.close());
 });
 
 init();

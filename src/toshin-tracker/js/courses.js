@@ -213,160 +213,157 @@ function renderMonthGoalPanel() {
   }
 }
 
-// ── Event wiring ──────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", () => {
-  // Month selector in goal panel
-  const monthSel = document.getElementById("goal-month-select");
-  if (monthSel) {
-    const now = new Date();
-    for (let i = -1; i <= 5; i++) {
-      const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-      const ym = formatYearMonth(d);
-      const opt = document.createElement("option");
-      opt.value = ym;
-      opt.textContent = `${d.getFullYear()}年${d.getMonth() + 1}月`;
-      if (ym === currentMonth) opt.selected = true;
-      monthSel.appendChild(opt);
-    }
-    monthSel.addEventListener("change", () => {
-      currentMonth = monthSel.value;
-      renderMonthGoalPanel();
-    });
+// Month selector in goal panel
+const monthSel = document.getElementById("goal-month-select");
+if (monthSel) {
+  const now = new Date();
+  for (let i = -1; i <= 5; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    const ym = formatYearMonth(d);
+    const opt = document.createElement("option");
+    opt.value = ym;
+    opt.textContent = `${d.getFullYear()}年${d.getMonth() + 1}月`;
+    if (ym === currentMonth) opt.selected = true;
+    monthSel.appendChild(opt);
   }
+  monthSel.addEventListener("change", () => {
+    currentMonth = monthSel.value;
+    renderMonthGoalPanel();
+  });
+}
 
-  // Save goal
-  document
-    .getElementById("goal-save-btn")
-    ?.addEventListener("click", async () => {
-      const val = Number(document.getElementById("goal-input").value);
-      if (!selectedCourseId || isNaN(val) || val < 0) return;
-      try {
-        await upsertGoal(selectedCourseId, currentMonth, val);
-        renderMonthGoalPanel();
-        showToast("目標を保存しました", "success");
-      } catch (e) {
-        showToast("保存に失敗しました", "error");
+// Save goal
+document
+  .getElementById("goal-save-btn")
+  ?.addEventListener("click", async () => {
+    const val = Number(document.getElementById("goal-input").value);
+    if (!selectedCourseId || isNaN(val) || val < 0) return;
+    try {
+      await upsertGoal(selectedCourseId, currentMonth, val);
+      renderMonthGoalPanel();
+      showToast("目標を保存しました", "success");
+    } catch (e) {
+      showToast("保存に失敗しました", "error");
+    }
+  });
+
+// Unit modal: completed toggle
+document
+  .getElementById("unit-completed-check")
+  ?.addEventListener("change", function () {
+    document.getElementById("unit-completed-date-row").style.display = this
+      .checked
+      ? ""
+      : "none";
+    document.getElementById("unit-completed-date").disabled = !this.checked;
+  });
+
+// Unit modal: save
+document
+  .getElementById("unit-save-btn")
+  ?.addEventListener("click", async () => {
+    const modal = document.getElementById("unit-modal");
+    const unitId = modal.dataset.unitId;
+    const unit = state.units.find((u) => u.id === unitId);
+    if (!unit) return;
+
+    const newCompleted = document.getElementById(
+      "unit-completed-check",
+    ).checked;
+    const newScheduledDate =
+      document.getElementById("unit-scheduled-date").value || null;
+
+    const saveBtn = document.getElementById("unit-save-btn");
+    saveBtn.disabled = true;
+
+    try {
+      // 完了状態の変更
+      if (newCompleted !== unit.is_completed) {
+        await toggleUnitComplete(unitId);
       }
-    });
 
-  // Unit modal: completed toggle
-  document
-    .getElementById("unit-completed-check")
-    ?.addEventListener("change", function () {
-      document.getElementById("unit-completed-date-row").style.display = this
-        .checked
-        ? ""
-        : "none";
-      document.getElementById("unit-completed-date").disabled = !this.checked;
-    });
+      // 予定日の変更（変更があった場合のみ）
+      if (newScheduledDate !== unit.scheduled_date) {
+        await setUnitScheduledDate(unitId, newScheduledDate);
+      }
 
-  // Unit modal: save
-  document
-    .getElementById("unit-save-btn")
-    ?.addEventListener("click", async () => {
-      const modal = document.getElementById("unit-modal");
-      const unitId = modal.dataset.unitId;
-      const unit = state.units.find((u) => u.id === unitId);
-      if (!unit) return;
+      modal.close();
+      renderCourseDetail();
+      renderMonthGoalPanel();
+      showToast("保存しました", "success");
+    } catch (e) {
+      showToast("保存に失敗しました: " + e.message, "error");
+    } finally {
+      saveBtn.disabled = false;
+    }
+  });
 
-      const newCompleted = document.getElementById(
-        "unit-completed-check",
-      ).checked;
-      const newScheduledDate =
-        document.getElementById("unit-scheduled-date").value || null;
-
-      const saveBtn = document.getElementById("unit-save-btn");
-      saveBtn.disabled = true;
-
-      try {
-        // 完了状態の変更
-        if (newCompleted !== unit.is_completed) {
-          await toggleUnitComplete(unitId);
-        }
-
-        // 予定日の変更（変更があった場合のみ）
-        if (newScheduledDate !== unit.scheduled_date) {
-          await setUnitScheduledDate(unitId, newScheduledDate);
-        }
-
-        modal.close();
+// Delete course
+document
+  .getElementById("delete-course-btn")
+  ?.addEventListener("click", async () => {
+    const course = state.courses.find((c) => c.id === selectedCourseId);
+    if (!course) return;
+    if (
+      !confirm(
+        `「${course.name}」を削除しますか？\nコマ記録・目標もすべて削除されます。`,
+      )
+    )
+      return;
+    try {
+      await deleteCourse(selectedCourseId);
+      selectedCourseId = state.courses[0]?.id || null;
+      renderCourseList();
+      if (selectedCourseId) {
         renderCourseDetail();
         renderMonthGoalPanel();
-        showToast("保存しました", "success");
-      } catch (e) {
-        showToast("保存に失敗しました: " + e.message, "error");
-      } finally {
-        saveBtn.disabled = false;
+      } else {
+        document.getElementById("detail-area").innerHTML =
+          `<div class="empty-state"><div class="icon">📚</div><p>講座を追加してください</p></div>`;
       }
-    });
-
-  // Delete course
-  document
-    .getElementById("delete-course-btn")
-    ?.addEventListener("click", async () => {
-      const course = state.courses.find((c) => c.id === selectedCourseId);
-      if (!course) return;
-      if (
-        !confirm(
-          `「${course.name}」を削除しますか？\nコマ記録・目標もすべて削除されます。`,
-        )
-      )
-        return;
-      try {
-        await deleteCourse(selectedCourseId);
-        selectedCourseId = state.courses[0]?.id || null;
-        renderCourseList();
-        if (selectedCourseId) {
-          renderCourseDetail();
-          renderMonthGoalPanel();
-        } else {
-          document.getElementById("detail-area").innerHTML =
-            `<div class="empty-state"><div class="icon">📚</div><p>講座を追加してください</p></div>`;
-        }
-        showToast("講座を削除しました");
-      } catch (e) {
-        showToast("削除に失敗しました", "error");
-      }
-    });
-
-  // Close modal buttons
-  document.querySelectorAll(".modal-close").forEach((btn) => {
-    btn.addEventListener("click", () => btn.closest("dialog")?.close());
+      showToast("講座を削除しました");
+    } catch (e) {
+      showToast("削除に失敗しました", "error");
+    }
   });
 
-  // Add course modal (shared logic)
-  document.getElementById("add-course-btn")?.addEventListener("click", () => {
-    document.getElementById("add-course-modal").showModal();
-  });
-
-  document
-    .getElementById("add-course-form")
-    ?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = document.getElementById("course-name-input").value.trim();
-      const subject = document
-        .getElementById("course-subject-input")
-        .value.trim();
-      const total_units = Number(
-        document.getElementById("course-units-input").value,
-      );
-      if (!name || !subject || !total_units) return;
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true;
-      try {
-        const { addCourse } = await import("./cloud.js");
-        const newCourse = await addCourse({ name, subject, total_units });
-        document.getElementById("add-course-modal").close();
-        e.target.reset();
-        renderCourseList();
-        selectCourse(newCourse.id);
-        showToast("講座を追加しました", "success");
-      } catch (err) {
-        showToast("追加に失敗しました: " + err.message, "error");
-      } finally {
-        btn.disabled = false;
-      }
-    });
+// Close modal buttons
+document.querySelectorAll(".modal-close").forEach((btn) => {
+  btn.addEventListener("click", () => btn.closest("dialog")?.close());
 });
+
+// Add course modal (shared logic)
+document.getElementById("add-course-btn")?.addEventListener("click", () => {
+  document.getElementById("add-course-modal").showModal();
+});
+
+document
+  .getElementById("add-course-form")
+  ?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("course-name-input").value.trim();
+    const subject = document
+      .getElementById("course-subject-input")
+      .value.trim();
+    const total_units = Number(
+      document.getElementById("course-units-input").value,
+    );
+    if (!name || !subject || !total_units) return;
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    try {
+      const { addCourse } = await import("./cloud.js");
+      const newCourse = await addCourse({ name, subject, total_units });
+      document.getElementById("add-course-modal").close();
+      e.target.reset();
+      renderCourseList();
+      selectCourse(newCourse.id);
+      showToast("講座を追加しました", "success");
+    } catch (err) {
+      showToast("追加に失敗しました: " + err.message, "error");
+    } finally {
+      btn.disabled = false;
+    }
+  });
 
 init();
