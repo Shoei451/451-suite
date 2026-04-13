@@ -32,7 +32,6 @@ const SUBJECT_ICON_MAP = {
   政治経済: "bi-bank",
   倫理: "bi-lightbulb",
   自習: "bi-pencil",
-  HR: "bi-people",
   LHR: "bi-people",
   総合: "bi-grid",
 };
