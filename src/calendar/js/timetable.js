@@ -7,7 +7,7 @@
  */
 
 import { state } from "./state.js";
-import { db as supabaseClient, tables } from "../../supabase_config.js";
+import { db as supabaseClient, tables } from "/common/supabase_config.js";
 import { getIcon } from "./icons.js";
 
 // ── Constants ────────────────────────────────────────────────
@@ -212,8 +212,8 @@ function openCellEditor(cellEl, dow, period) {
         />
         <datalist id="tt-subject-list">
           ${Object.keys(SUBJECT_ICON_MAP)
-            .map((s) => `<option value="${s}">`)
-            .join("")}
+      .map((s) => `<option value="${s}">`)
+      .join("")}
         </datalist>
       </label>
       <div class="tt-icon-grid">

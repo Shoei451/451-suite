@@ -1,4 +1,4 @@
-import { db, tables } from "../supabase_config.js";
+import { db, tables } from "/common/supabase_config.js";
 
 const TABLE = tables.WEEKLY_SCHEDULE;
 const DAYS = ["日", "月", "火", "水", "木", "金", "土"];

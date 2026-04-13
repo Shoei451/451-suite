@@ -10,7 +10,7 @@ export const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 // writing raw strings in application code.
 //
 // Usage:
-//   import { tables } from "../../supabase_config.js";
+//   import { tables } from "/common/supabase_config.js";
 //   db.from(tables.CALENDAR_APP).select("*")
 //
 export const tables = {

@@ -1,4 +1,4 @@
-import { db } from "../../supabase_config.js";
+import { db } from "../../common/supabase_config.js";
 import { state } from "./state.js";
 
 let _onLoginCallback = null;
@@ -60,7 +60,7 @@ export async function initAuth() {
   }
 }
 
-export async function requireAuthOrRedirect(redirectTo = "home.html") {
+export async function requireAuthOrRedirect(redirectTo = "/home.html") {
   const {
     data: { session },
   } = await db.auth.getSession();

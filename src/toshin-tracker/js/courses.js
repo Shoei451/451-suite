@@ -22,7 +22,7 @@ let currentMonth = formatYearMonth(new Date());
 // ── Init ─────────────────────────────────────────────────────
 async function init() {
   wireLogoutButton();
-  const session = await requireAuthOrRedirect("home.html");
+  const session = await requireAuthOrRedirect("/home.html");
   if (!session) return;
 
   showLoading(true);

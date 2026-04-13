@@ -1,4 +1,4 @@
-import { db, tables } from "../../supabase_config.js";
+import { db, tables } from "../../common/supabase_config.js";
 import { state, uid, formatDate } from "./state.js";
 
 // ── Courses ──────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-import { db as supabaseClient, tables } from "../../supabase_config.js";
+import { db as supabaseClient, tables } from "/common/supabase_config.js";
 import { state } from "./state.js";
 
 let syncChannel = null;

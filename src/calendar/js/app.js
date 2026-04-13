@@ -1,10 +1,11 @@
 import { $, state, formatDate, uid } from "./state.js";
 import { render, openModal } from "./render.js";
 import { hasCloud, setSyncStatus, clearAllCloud } from "./cloud.js";
-import { initAuth } from "./auth.js";
+import { user } from "/common/auth-guard.js";
+// user が null になることはもうない
 import { initTabs } from "./tabs.js";
 import { initTimetable } from "./timetable.js";
-import { db as supabaseClient, tables } from "../../supabase_config.js";
+import { db as supabaseClient, tables } from "/common/supabase_config.js";
 
 $("#filterCourse").onchange = (e) => {
   state.filterCourse = e.target.value;

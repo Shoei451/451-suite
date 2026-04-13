@@ -1,4 +1,4 @@
-import { db as supabaseClient } from "../../supabase_config.js";
+import { db as supabaseClient } from "/common/supabase_config.js";
 import { state } from "./state.js";
 import {
   loadRemoteEvents,
@@ -66,7 +66,7 @@ export async function initAuth() {
         await loadRemoteEvents();
         subscribeRealtime(() => loadRemoteEvents());
         render();
-      } catch {}
+      } catch { }
     } else {
       showAuth();
     }
@@ -82,7 +82,7 @@ export async function initAuth() {
       await loadRemoteEvents();
       subscribeRealtime(() => loadRemoteEvents());
       render();
-    } catch {}
+    } catch { }
   }
 }
 
