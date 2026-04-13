@@ -152,19 +152,17 @@ async function saveTimetableCell(dow, period, subject, icon_key) {
 let activePopover = null;
 
 function onOutsideClick(e) {
-  if (!popover.contains(e.target) && e.target !== cellEl) {
+  if (activePopover && !activePopover.contains(e.target)) {
     closePopover();
-    document.removeEventListener("click", onOutsideClick);
   }
 }
 
-// closePopover に onOutsideClick の削除を追加
 function closePopover() {
   if (activePopover) {
     activePopover.remove();
     activePopover = null;
   }
-  document.removeEventListener("click", onOutsideClick); // ← 追加
+  document.removeEventListener("click", onOutsideClick);
 }
 
 function openCellEditor(cellEl, dow, period) {
