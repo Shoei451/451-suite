@@ -418,7 +418,6 @@ export function initTimetable() {
   });
 }
 
-// Called from auth.js after login
 export function refreshTimetable() {
   if (!state.user) {
     cells.clear();

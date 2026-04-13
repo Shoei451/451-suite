@@ -65,7 +65,7 @@ async function minifyAsset(filePath) {
     legalComments: "none",
     loader,
     minify: true,
-    target: loader === "js" ? "es2022" : undefined,
+    target: loader === "js" ? "esnext" : undefined,
   });
 
   await fs.writeFile(filePath, result.code, "utf8");

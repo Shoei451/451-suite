@@ -144,7 +144,7 @@ body {
 
 /* ===================== APP SHELL ===================== */
 #app {
-  display: none;
+  display: flex;
   min-height: 100dvh;
   flex-direction: column;
 }
