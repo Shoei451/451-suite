@@ -12,10 +12,6 @@
     <link rel="stylesheet" href="style/base.css" />
     <link rel="stylesheet" href="style/components.css" />
     <style>
-      #auth-screen {
-        display: none !important;
-      }
-
       /* ── Calendar layout ── */
       .calendar-layout {
         display: grid;
@@ -364,63 +360,6 @@
     </style>
   </head>
   <body>
-    <!-- Auth -->
-    <div id="auth-screen">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <div class="auth-logo-mark">T</div>
-          <span class="auth-logo-text">東進受講トラッカー</span>
-        </div>
-        <h2>ログイン</h2>
-        <p class="sub">東進のアカウントで同期されます</p>
-        <div id="auth-error" class="auth-error hidden"></div>
-        <form id="auth-form" class="auth-form">
-          <label
-            >メールアドレス<input
-              type="email"
-              id="auth-email"
-              required
-              placeholder="your@email.com"
-              autocomplete="email"
-          /></label>
-          <label
-            >パスワード<input
-              type="password"
-              id="auth-password"
-              required
-              placeholder="パスワード"
-              autocomplete="current-password"
-          /></label>
-          <button
-            type="submit"
-            id="auth-submit"
-            class="btn btn-primary"
-            style="width: 100%; margin-top: 4px"
-          >
-            ログイン
-          </button>
-        </form>
-        <div
-          style="
-            text-align: center;
-            margin-top: 16px;
-            font-size: 13px;
-            color: var(--ink-3);
-          "
-        >
-          アカウントをお持ちでない場合
-          <button
-            type="button"
-            id="auth-toggle"
-            class="btn btn-ghost"
-            style="font-size: 13px; padding: 4px 8px; min-height: auto"
-          >
-            新規登録
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!-- App -->
     <div id="app-layout" class="app-layout">
       <nav class="topnav">

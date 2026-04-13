@@ -1,4 +1,5 @@
 import { db, tables } from "/common/supabase_config.js";
+import { user as authedUser, signOutAndRedirect } from "/common/auth-guard.js";
 
 const TABLE = tables.WEEKLY_SCHEDULE;
 const DAYS = ["日", "月", "火", "水", "木", "金", "土"];
@@ -25,14 +26,13 @@ const COLORS = [
 // ============================================================
 // STATE
 // ============================================================
-let user = null;
+let user = authedUser;
 let slots = [];
 let viewDay = new Date().getDay(); // sidebar / mobile settings preview
 let addDays = new Set([new Date().getDay()]); // add-form multi-select
 let selColor = COLORS[0];
 let notifTimers = [];
 let clockTick = null;
-let isSignup = false;
 let editingId = null; // null = 追加モード、uuid = 編集モード
 
 // ============================================================
@@ -628,43 +628,9 @@ function checkNotifBanner() {
   }
 }
 
-// ============================================================
-// AUTH
-// ============================================================
-async function handleSubmit() {
-  const email = document.getElementById("email").value.trim();
-  const pw = document.getElementById("password").value;
-  const msgEl = document.getElementById("auth-msg");
-  const btn = document.getElementById("btn-submit");
-  msgEl.textContent = "";
-  msgEl.className = "error-msg";
-  btn.disabled = true;
-
-  const result = isSignup
-    ? await db.auth.signUp({ email, password: pw })
-    : await db.auth.signInWithPassword({ email, password: pw });
-  btn.disabled = false;
-
-  if (result.error) {
-    msgEl.textContent = result.error.message;
-    return;
-  }
-  if (isSignup && !result.data.session) {
-    msgEl.className = "success-msg";
-    msgEl.textContent =
-      "確認メールを送信しました。確認後ログインしてください。";
-    return;
-  }
-  user = result.data.user;
-  await bootApp();
-}
-
-// ============================================================
-// BOOT
-// ============================================================
 async function bootApp() {
+  if (!user) return;
   await fetchSlots();
-  document.getElementById("auth-screen").style.display = "none";
   document.getElementById("app").style.display = "flex";
   renderAll();
   checkNotifBanner();
@@ -700,37 +666,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       btn.addEventListener("click", () => switchTab(btn.dataset.tab)),
     );
 
-  // Auth toggle
-  document.getElementById("btn-mode-toggle").addEventListener("click", () => {
-    isSignup = !isSignup;
-    document.getElementById("auth-title").textContent = isSignup
-      ? "新規登録"
-      : "ログイン";
-    document.getElementById("btn-submit").textContent = isSignup
-      ? "登録する"
-      : "ログイン";
-    document.getElementById("btn-mode-toggle").textContent = isSignup
-      ? "ログイン"
-      : "新規登録";
-    document.getElementById("auth-toggle-text").textContent = isSignup
-      ? "すでにアカウントをお持ちの方は"
-      : "アカウントをお持ちでない方は";
-    document.getElementById("auth-msg").textContent = "";
-  });
-
-  document.getElementById("btn-submit").addEventListener("click", handleSubmit);
-  document
-    .getElementById("password")
-    .addEventListener("keydown", (e) => e.key === "Enter" && handleSubmit());
-
   document.getElementById("btn-signout").addEventListener("click", async () => {
     clearInterval(clockTick);
     clearNotifTimers();
-    await db.auth.signOut();
-    user = null;
-    slots = [];
-    document.getElementById("app").style.display = "none";
-    document.getElementById("auth-screen").style.display = "flex";
+    await signOutAndRedirect();
   });
 
   document
@@ -744,12 +683,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     .getElementById("btn-cancel-edit")
     .addEventListener("click", cancelEdit);
 
-  // Restore session
-  const {
-    data: { session },
-  } = await db.auth.getSession();
-  if (session) {
-    user = session.user;
-    await bootApp();
-  }
+  await bootApp();
 });

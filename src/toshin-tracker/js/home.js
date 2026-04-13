@@ -5,25 +5,25 @@ import {
   escapeHtml,
   showToast,
 } from "./state.js";
-import { fetchAll, addCourse, deleteCourse } from "./cloud.js";
-import { initAuth, wireAuthForm, onLogin } from "./auth.js";
+import { fetchAll, addCourse } from "./cloud.js";
+import { user, wireLogoutButton } from "/common/auth-guard.js";
 
 // ── Init ─────────────────────────────────────────────────────
 async function init() {
-  wireAuthForm();
-  onLogin(async () => {
-    showLoading(true);
-    try {
-      await fetchAll();
-      renderAll();
-    } catch (e) {
-      showToast("データの読み込みに失敗しました", "error");
-      console.error(e);
-    } finally {
-      showLoading(false);
-    }
-  });
-  await initAuth();
+  if (!user) return;
+  state.user = user;
+  document.getElementById("app-layout")?.classList.add("visible");
+  wireLogoutButton();
+  showLoading(true);
+  try {
+    await fetchAll();
+    renderAll();
+  } catch (e) {
+    showToast("データの読み込みに失敗しました", "error");
+    console.error(e);
+  } finally {
+    showLoading(false);
+  }
 }
 
 function showLoading(on) {

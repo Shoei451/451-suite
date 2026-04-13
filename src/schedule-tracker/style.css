@@ -39,62 +39,6 @@ body {
   min-height: 100dvh;
 }
 
-/* ===================== AUTH ===================== */
-#auth-screen {
-  min-height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-}
-.auth-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem 2rem;
-  width: 100%;
-  max-width: 380px;
-  box-shadow: var(--shadow-md);
-}
-.auth-badge {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  background: var(--accent-light);
-  padding: 0.2rem 0.6rem;
-  border-radius: 100px;
-  margin-bottom: 1.25rem;
-}
-.auth-title {
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-}
-.auth-sub {
-  font-size: 0.85rem;
-  color: var(--sub);
-  margin-bottom: 2rem;
-}
-.auth-toggle {
-  font-size: 0.82rem;
-  color: var(--sub);
-  text-align: center;
-  margin-top: 1rem;
-}
-.auth-toggle button {
-  background: none;
-  border: none;
-  color: var(--accent);
-  cursor: pointer;
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
-  padding: 0;
-  text-decoration: underline;
-}
-
 /* ===================== FORM BASICS ===================== */
 .form-group {
   display: flex;
@@ -231,15 +175,6 @@ body {
   font-size: 1rem;
   font-weight: 700;
   color: var(--text);
-}
-.navbar-sub {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--accent);
-  background: var(--accent-light);
-  padding: 0.1rem 0.45rem;
-  border-radius: 100px;
-  letter-spacing: 0.08em;
 }
 /* Desktop-only tab links in navbar */
 .navbar-tabs {

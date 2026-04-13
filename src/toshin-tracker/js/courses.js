@@ -13,7 +13,7 @@ import {
   upsertGoal,
   deleteCourse,
 } from "./cloud.js";
-import { requireAuthOrRedirect, wireLogoutButton } from "./auth.js";
+import { user, wireLogoutButton } from "/common/auth-guard.js";
 
 // ── State ─────────────────────────────────────────────────────
 let selectedCourseId = null;
@@ -21,10 +21,10 @@ let currentMonth = formatYearMonth(new Date());
 
 // ── Init ─────────────────────────────────────────────────────
 async function init() {
+  if (!user) return;
+  state.user = user;
+  document.getElementById("app-layout")?.classList.add("visible");
   wireLogoutButton();
-  const session = await requireAuthOrRedirect("/home.html");
-  if (!session) return;
-
   showLoading(true);
   try {
     await fetchAll();

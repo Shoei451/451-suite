@@ -1,11 +1,29 @@
 import { $, state, formatDate, uid } from "./state.js";
 import { render, openModal } from "./render.js";
-import { hasCloud, setSyncStatus, clearAllCloud } from "./cloud.js";
-import { user } from "/common/auth-guard.js";
-// user が null になることはもうない
+import {
+  hasCloud,
+  setSyncStatus,
+  clearAllCloud,
+  loadRemoteEvents,
+  subscribeRealtime,
+} from "./cloud.js";
+import { user, wireLogoutButton } from "/common/auth-guard.js";
 import { initTabs } from "./tabs.js";
 import { initTimetable } from "./timetable.js";
 import { db as supabaseClient, tables } from "/common/supabase_config.js";
+
+const userInfoBox = document.getElementById("userInfoBox");
+const userEmailEl = document.getElementById("userEmail");
+const logoutBtn = document.getElementById("logoutBtn");
+
+state.user = user;
+if (user) {
+  document.getElementById("mainApp")?.classList.add("visible");
+  if (userInfoBox) userInfoBox.style.display = "";
+  if (userEmailEl) userEmailEl.textContent = user.email || "";
+  if (logoutBtn) logoutBtn.style.display = "";
+  wireLogoutButton("logoutBtn");
+}
 
 $("#filterCourse").onchange = (e) => {
   state.filterCourse = e.target.value;
@@ -126,4 +144,19 @@ document.getElementById("exportPdfBtn")?.addEventListener("click", () => {
 // ── 起動 ──────────────────────────────────────────────────────
 initTabs();
 initTimetable();
-initAuth();
+if (user) {
+  try {
+    await loadRemoteEvents();
+    subscribeRealtime(async () => {
+      try {
+        await loadRemoteEvents();
+        render();
+      } catch {
+        // loadRemoteEvents updates sync status on failure.
+      }
+    });
+  } catch {
+    // loadRemoteEvents updates sync status on failure.
+  }
+}
+render();

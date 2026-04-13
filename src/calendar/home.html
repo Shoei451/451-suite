@@ -12,7 +12,6 @@
     />
     <link rel="stylesheet" href="css/tokens.css" />
     <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/auth.css" />
     <link rel="stylesheet" href="css/layout.css" />
     <link rel="stylesheet" href="css/components.css" />
     <link rel="stylesheet" href="css/timetable.css" />
@@ -107,50 +106,6 @@
   </head>
 
   <body>
-    <!-- ===================== 認証画面 ===================== -->
-    <div id="authScreen" class="auth-screen">
-      <div class="auth-card">
-        <h1>学生用カレンダー</h1>
-        <p>ログインしてデバイス間で予定を同期</p>
-        <div id="authError" class="error-message" style="display: none"></div>
-        <form id="authForm" class="auth-form">
-          <div>
-            <label for="authEmail">メールアドレス</label>
-            <input
-              type="email"
-              id="authEmail"
-              required
-              placeholder="your@email.com"
-            />
-          </div>
-          <div>
-            <label for="authPassword">パスワード</label>
-            <input
-              type="password"
-              id="authPassword"
-              required
-              placeholder="6文字以上"
-            />
-          </div>
-          <button type="submit" id="authSubmit">ログイン</button>
-        </form>
-        <div class="auth-toggle">
-          <span id="authToggleText">アカウントをお持ちでない場合</span>
-          <button type="button" id="authToggleBtn">新規登録</button>
-        </div>
-        <div style="text-align: center; margin-top: 16px">
-          <button
-            type="button"
-            id="offlineBtn"
-            class="ghost"
-            style="font-size: 12px; padding: 8px 16px; min-height: auto"
-          >
-            ログインせずにローカルで使う
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!-- ===================== メインアプリ ===================== -->
     <div class="app" id="mainApp">
       <!-- ── ヘッダー ── -->

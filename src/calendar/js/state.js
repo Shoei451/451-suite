@@ -44,8 +44,6 @@ export const NO_COURSE_TYPES = ["時程変更", "部活動", "長期休み", "�
 export const state = {
   events: [],
   user: null,
-  isOffline: false,
-  isAuthMode: "login",
   year: new Date().getFullYear(),
   month: new Date().getMonth(),
   filterCourse: "",

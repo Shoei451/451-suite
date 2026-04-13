@@ -1,15 +1,15 @@
 import { state, formatYearMonth, escapeHtml, showToast } from "./state.js";
 import { fetchAll, toggleStageComplete, setStageMonthGoal } from "./cloud.js";
-import { requireAuthOrRedirect, wireLogoutButton } from "./auth.js";
+import { user, wireLogoutButton } from "/common/auth-guard.js";
 
 let currentMonth = formatYearMonth(new Date());
 
 // ── Init ─────────────────────────────────────────────────────
 async function init() {
+  if (!user) return;
+  state.user = user;
+  document.getElementById("app-layout")?.classList.add("visible");
   wireLogoutButton();
-  const session = await requireAuthOrRedirect("/home.html");
-  if (!session) return;
-
   showLoading(true);
   try {
     await fetchAll();
