@@ -10,7 +10,7 @@ import {
 } from "./state.js";
 
 // icons.jsからgetIconをimport（追加）:
-import { getIcon } from "./icons.js";
+import { getIcon } from "/common/icons.js";
 
 import {
   hasCloud,
@@ -580,8 +580,8 @@ document.getElementById("eventForm").addEventListener("submit", async (ev) => {
           ? state.events.filter((e) => e.repeat_group_id === repeatGrpId)
           : scope === "this_and_after"
             ? state.events.filter(
-                (e) => e.repeat_group_id === repeatGrpId && e.date >= startDate,
-              )
+              (e) => e.repeat_group_id === repeatGrpId && e.date >= startDate,
+            )
             : [state.events.find((e) => e.id === id)].filter(Boolean);
       syncLater(targets.map((e) => () => saveEventCloud(e)));
 

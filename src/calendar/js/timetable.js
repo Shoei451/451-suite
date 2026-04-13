@@ -8,7 +8,7 @@
 
 import { state } from "./state.js";
 import { db as supabaseClient, tables } from "/common/supabase_config.js";
-import { getIcon } from "./icons.js";
+import { getIcon } from "/common/icons.js";
 
 // ── Constants ────────────────────────────────────────────────
 const DAY_LABELS = ["月", "火", "水", "木", "金", "土", "日"];
