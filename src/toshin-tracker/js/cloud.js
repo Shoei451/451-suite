@@ -1,4 +1,7 @@
-import { db } from "./config.js";
+// 変更後
+import { db } from "./config.js"; // config.js は T を再エクスポートする
+import { T } from "../../supabase_config.js";
+db.from(T.TOSHIN_COURSES).select("*");
 import { state, uid, formatDate, showToast } from "./state.js";
 
 // ── Courses ──────────────────────────────────────────────────

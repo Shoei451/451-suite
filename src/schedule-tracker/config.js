@@ -1,6 +1,5 @@
-import { db } from "../supabase_config.js";
-
-export { db };
+// schedule-tracker/config.js
+export { db, T } from "../supabase_config.js";
 
 export const TABLE = "weekly_schedule";
 export const DAYS = ["日", "月", "火", "水", "木", "金", "土"];
