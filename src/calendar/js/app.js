@@ -141,6 +141,16 @@ document.getElementById("exportPdfBtn")?.addEventListener("click", () => {
   });
 });
 
+// ── 最大時限設定 ──────────────────────────────────────────────
+const maxPeriodSelect = document.getElementById("maxPeriodSelect");
+if (maxPeriodSelect) {
+  maxPeriodSelect.value = localStorage.getItem("maxPeriod") || "6";
+  maxPeriodSelect.addEventListener("change", () => {
+    localStorage.setItem("maxPeriod", maxPeriodSelect.value);
+    window.dispatchEvent(new Event("maxperiod-change"));
+  });
+}
+
 // ── 起動 ──────────────────────────────────────────────────────
 initTabs();
 initTimetable();
