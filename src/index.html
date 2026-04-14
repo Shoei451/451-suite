@@ -1,245 +1,472 @@
 <!doctype html>
 <html lang="ja">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>451-suite | Navigation</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>451-suite</title>
     <meta
       name="description"
-      content="451-suite に含まれる各 Web アプリへ移動するためのナビゲーションページです。"
+      content="学生のための個人開発ツール集。カレンダー・スケジュール管理・東進受講トラッカー。"
     />
+    <link rel="stylesheet" href="style.css" />
     <style>
-      :root {
-        color-scheme: light;
-        --bg: #f4efe7;
-        --bg-accent: #ead7c4;
-        --surface: rgba(255, 252, 247, 0.84);
-        --surface-strong: #fffaf3;
-        --border: rgba(103, 67, 41, 0.16);
-        --text: #2f241d;
-        --muted: #6d5a4d;
-        --calendar: #bd5d38;
-        --schedule: #2d6a5f;
-        --toshin: #3659a7;
-        --shadow: 0 24px 60px rgba(57, 35, 18, 0.12);
-      }
+      /* ── Index-specific styles ───────────────────── */
 
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        font-family:
-          "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
-        color: var(--text);
-        background:
-          radial-gradient(circle at top left, rgba(255, 255, 255, 0.8), transparent 30%),
-          radial-gradient(circle at bottom right, rgba(189, 93, 56, 0.16), transparent 32%),
-          linear-gradient(160deg, var(--bg) 0%, #f9f5ef 48%, var(--bg-accent) 100%);
-      }
-
-      .shell {
-        width: min(1080px, calc(100% - 32px));
-        margin: 0 auto;
-        padding: 48px 0 64px;
-      }
-
-      .hero {
-        padding: 24px 0 36px;
-      }
-
-      .eyebrow {
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 999px;
-        background: rgba(255, 250, 243, 0.88);
-        border: 1px solid var(--border);
-        color: var(--muted);
-        font-size: 13px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      h1 {
-        margin: 18px 0 12px;
-        font-size: clamp(40px, 7vw, 72px);
-        line-height: 0.98;
-        letter-spacing: -0.04em;
-      }
-
-      .lead {
-        max-width: 700px;
-        margin: 0;
-        color: var(--muted);
-        font-size: clamp(16px, 2.5vw, 20px);
-        line-height: 1.7;
-      }
-
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 18px;
-      }
-
-      .card {
-        display: block;
-        padding: 24px;
-        border-radius: 28px;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        box-shadow: var(--shadow);
-        text-decoration: none;
-        color: inherit;
-        backdrop-filter: blur(16px);
-        transition:
-          transform 160ms ease,
-          border-color 160ms ease,
-          background-color 160ms ease;
-      }
-
-      .card:hover,
-      .card:focus-visible {
-        transform: translateY(-4px);
-        background: var(--surface-strong);
-        outline: none;
-      }
-
-      .card[data-accent="calendar"]:hover,
-      .card[data-accent="calendar"]:focus-visible {
-        border-color: rgba(189, 93, 56, 0.45);
-      }
-
-      .card[data-accent="schedule"]:hover,
-      .card[data-accent="schedule"]:focus-visible {
-        border-color: rgba(45, 106, 95, 0.42);
-      }
-
-      .card[data-accent="toshin"]:hover,
-      .card[data-accent="toshin"]:focus-visible {
-        border-color: rgba(54, 89, 167, 0.42);
-      }
-
-      .card-top {
+      /* Topbar */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        height: 56px;
+        background: var(--color-surface);
+        border-bottom: 1px solid var(--color-border);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 22px;
+        padding: 0 clamp(16px, 5vw, 48px);
+        transition: background var(--t-fast);
       }
 
-      .icon {
-        width: 52px;
-        height: 52px;
-        display: grid;
-        place-items: center;
-        border-radius: 18px;
-        font-size: 22px;
-        font-weight: 700;
-        color: white;
-      }
-
-      .icon.calendar {
-        background: var(--calendar);
-      }
-
-      .icon.schedule {
-        background: var(--schedule);
-      }
-
-      .icon.toshin {
-        background: var(--toshin);
-      }
-
-      .path {
-        color: var(--muted);
-        font-size: 13px;
-        font-family: "Consolas", "SFMono-Regular", monospace;
-      }
-
-      .card h2 {
-        margin: 0 0 10px;
-        font-size: 28px;
-        line-height: 1.15;
-      }
-
-      .card p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.7;
-      }
-
-      .cta {
-        display: inline-flex;
+      .topbar-brand {
+        display: flex;
         align-items: center;
         gap: 10px;
-        margin-top: 22px;
-        color: var(--text);
+        font-weight: 700;
+        font-size: 15px;
+        color: var(--color-text-primary);
+      }
+
+      .topbar-mark {
+        width: 28px;
+        height: 28px;
+        background: var(--color-accent);
+        color: var(--color-bg);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 12px;
+        flex-shrink: 0;
+      }
+
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Hero */
+      .hero {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: clamp(48px, 10vw, 96px) clamp(16px, 5vw, 48px) 0;
+        text-align: center;
+      }
+
+      .hero-eyebrow {
+        display: inline-block;
+        font-size: 11px;
         font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+        background: var(--color-surface-2);
+        border: 1px solid var(--color-border);
+        border-radius: 99px;
+        padding: 4px 12px;
+        margin-bottom: 24px;
       }
 
-      .footer {
-        margin-top: 18px;
-        color: var(--muted);
+      .hero h1 {
+        font-size: clamp(32px, 6vw, 56px);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        color: var(--color-text-primary);
+        margin-bottom: 20px;
+      }
+
+      .hero-sub {
+        font-size: clamp(14px, 2vw, 17px);
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        max-width: 520px;
+        margin: 0 auto 36px;
+      }
+
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: clamp(48px, 10vw, 80px);
+      }
+
+      .btn-hero-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 11px 22px;
+        background: var(--color-accent);
+        color: var(--color-bg);
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: opacity var(--t-fast), transform var(--t-fast);
+      }
+
+      .btn-hero-primary:hover {
+        opacity: 0.82;
+        transform: translateY(-1px);
+      }
+
+      .btn-hero-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 20px;
+        background: transparent;
+        color: var(--color-text-secondary);
+        border: 1.5px solid var(--color-border-strong);
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-weight: 500;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all var(--t-fast);
+      }
+
+      .btn-hero-ghost:hover {
+        background: var(--color-surface);
+        color: var(--color-text-primary);
+      }
+
+      /* Apps section */
+      .section {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: clamp(32px, 6vw, 64px) clamp(16px, 5vw, 48px);
+      }
+
+      .section-label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+        margin-bottom: 32px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--color-border);
+      }
+
+      .apps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      /* Inherit .app-card, .card-icon etc. from style.css */
+
+      /* Feature rows */
+      .features {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 clamp(16px, 5vw, 48px) clamp(32px, 6vw, 64px);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .feature-item {
+        display: flex;
+        gap: 14px;
+        padding: 18px 20px;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+      }
+
+      .feature-icon {
+        font-size: 18px;
+        flex-shrink: 0;
+        width: 32px;
+        line-height: 1;
+        margin-top: 2px;
+      }
+
+      .feature-text h3 {
         font-size: 14px;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-bottom: 4px;
       }
 
-      @media (max-width: 860px) {
-        .grid {
+      .feature-text p {
+        font-size: 13px;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+      }
+
+      /* Stack strip */
+      .stack-strip {
+        background: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .stack-strip-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: clamp(20px, 4vw, 32px) clamp(16px, 5vw, 48px);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .stack-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--color-text-muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-right: 4px;
+        flex-shrink: 0;
+      }
+
+      .stack-tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 12px;
+        background: var(--color-surface-2);
+        border: 1px solid var(--color-border);
+        border-radius: 99px;
+        font-size: 12px;
+        color: var(--color-text-secondary);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      /* Footer */
+      .footer {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: clamp(20px, 4vw, 32px) clamp(16px, 5vw, 48px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        border-top: 1px solid var(--color-border);
+      }
+
+      .footer p {
+        font-size: 12px;
+        color: var(--color-text-muted);
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .footer-links a {
+        font-size: 12px;
+        color: var(--color-text-muted);
+        transition: color var(--t-fast);
+      }
+
+      .footer-links a:hover {
+        color: var(--color-text-primary);
+      }
+
+      /* Divider */
+      hr.divider {
+        border: none;
+        border-top: 1px solid var(--color-border);
+      }
+
+      /* Responsive */
+      @media (max-width: 680px) {
+        .apps-grid {
           grid-template-columns: 1fr;
         }
 
-        .shell {
-          width: min(720px, calc(100% - 24px));
-          padding-top: 28px;
+        .features {
+          grid-template-columns: 1fr;
+        }
+
+        .footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero h1 {
+          letter-spacing: -0.02em;
         }
       }
     </style>
   </head>
   <body>
-    <main class="shell">
-      <section class="hero">
-        <span class="eyebrow">451-suite</span>
-        <h1>Apps, one start page.</h1>
-        <p class="lead">
-          src 直下のナビページです。各アプリの紹介ページまたはエントリーポイントへ移動できます。
-        </p>
-      </section>
 
-      <nav class="grid" aria-label="451-suite application navigation">
-        <a class="card" data-accent="calendar" href="calendar/">
-          <div class="card-top">
-            <div class="icon calendar">C</div>
-            <span class="path">/calendar/</span>
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-brand">
+        <div class="topbar-mark">4</div>
+        451-suite
+      </div>
+      <div class="topbar-right">
+        <button class="btn-icon-sm" id="theme-toggle" aria-label="テーマ切替">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+          </svg>
+        </button>
+        <a href="home.html" class="btn-ghost">Log in</a>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-eyebrow">Personal Dev Tools</div>
+      <h1>自分のために<br />作ったツール集</h1>
+      <p class="hero-sub">
+        カレンダー管理・週間スケジュール・東進受講トラッカー。学生生活の実際の課題から生まれた、シンプルで使いやすい3つのWebアプリ。
+      </p>
+      <div class="hero-actions">
+        <a href="home.html" class="btn-hero-primary">
+          アプリを使う
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </a>
+        <a href="https://github.com/Shoei451" target="_blank" rel="noopener noreferrer" class="btn-hero-ghost">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </section>
+
+    <!-- Apps -->
+    <section class="section">
+      <div class="section-label">Apps</div>
+      <div class="apps-grid">
+        <a class="app-card" href="calendar/home.html" style="--card-accent: #bd5d38">
+          <div class="card-icon" style="background: #bd5d38">C</div>
+          <div class="card-title">451-calendar</div>
+          <div class="card-desc">
+            課題・試験・授業を一括管理する学生向けカレンダー。時間割・ダッシュボード・クラウド同期対応。
           </div>
-          <h2>451-calendar</h2>
-          <p>課題、試験、授業予定をひとまとめに管理する学生向けカレンダー。</p>
-          <span class="cta">Open app <span aria-hidden="true">→</span></span>
+          <div class="card-arrow">Open <span>→</span></div>
         </a>
 
-        <a class="card" data-accent="schedule" href="schedule-tracker/">
-          <div class="card-top">
-            <div class="icon schedule">S</div>
-            <span class="path">/schedule-tracker/</span>
+        <a class="app-card" href="schedule-tracker/home.html" style="--card-accent: #2d6a5f">
+          <div class="card-icon" style="background: #2d6a5f">S</div>
+          <div class="card-title">Schedule</div>
+          <div class="card-desc">
+            曜日ごとの予定と24時間ドーナツチャート。リアルタイム時計と通知で今の予定を常に確認。
           </div>
-          <h2>Schedule</h2>
-          <p>曜日ごとの予定表示と通知に寄せた、シンプルなスケジュール管理ツール。</p>
-          <span class="cta">Open app <span aria-hidden="true">→</span></span>
+          <div class="card-arrow">Open <span>→</span></div>
         </a>
 
-        <a class="card" data-accent="toshin" href="toshin-tracker/">
-          <div class="card-top">
-            <div class="icon toshin">T</div>
-            <span class="path">/toshin-tracker/</span>
+        <a class="app-card" href="toshin-tracker/home.html" style="--card-accent: #3659a7">
+          <div class="card-icon" style="background: #3659a7">T</div>
+          <div class="card-title">東進受講トラッカー</div>
+          <div class="card-desc">
+            コマ進捗・高速基礎マスター・模試カレンダーをひとまとめに管理するトラッカー。
           </div>
-          <h2>東進受講トラッカー</h2>
-          <p>東進の講座進捗、マスター、予定を自分で追跡するためのトラッカー。</p>
-          <span class="cta">Open app <span aria-hidden="true">→</span></span>
+          <div class="card-arrow">Open <span>→</span></div>
         </a>
-      </nav>
+      </div>
+    </section>
 
-      <p class="footer">Build entry: <code>src/index.html</code></p>
-    </main>
+    <!-- Features -->
+    <section class="section" style="padding-top: 0">
+      <div class="section-label">Features</div>
+      <div class="features" style="padding: 0; max-width: none">
+        <div class="feature-item">
+          <div class="feature-icon">☁️</div>
+          <div class="feature-text">
+            <h3>クラウド同期</h3>
+            <p>Supabase + Row Level Securityでデバイスをまたいでデータを安全に同期。</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📅</div>
+          <div class="feature-text">
+            <h3>繰り返し・複数日登録</h3>
+            <p>週次の授業や連続する期間の課題を一括で登録。カレンダーとトラッカーで連携。</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🌙</div>
+          <div class="feature-text">
+            <h3>ダークモード</h3>
+            <p>システム設定に自動追従、または手動で切り替え可能。</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📱</div>
+          <div class="feature-text">
+            <h3>モバイル対応</h3>
+            <p>すべてのアプリがスマートフォンで快適に動作するレスポンシブデザイン。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stack -->
+    <div class="stack-strip">
+      <div class="stack-strip-inner">
+        <span class="stack-label">Stack</span>
+        <span class="stack-tag">Vanilla JS</span>
+        <span class="stack-tag">HTML / CSS</span>
+        <span class="stack-tag">Supabase</span>
+        <span class="stack-tag">Netlify</span>
+        <span class="stack-tag">esbuild</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2025 Shoei Okamoto · 451-suite</p>
+      <div class="footer-links">
+        <a href="home.html">Log in</a>
+        <a href="https://github.com/Shoei451" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </footer>
+
+    <script>
+      const saved = localStorage.getItem("theme");
+      const isDark = saved === "dark" || (!saved && matchMedia("(prefers-color-scheme: dark)").matches);
+      if (isDark) document.body.classList.add("dark");
+
+      const toggle = document.getElementById("theme-toggle");
+      const moonSvg = `<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>`;
+      const sunSvg = `<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></svg>`;
+
+      function updateIcon(dark) { toggle.innerHTML = dark ? sunSvg : moonSvg; }
+      updateIcon(isDark);
+      toggle.addEventListener("click", () => {
+        const dark = document.body.classList.toggle("dark");
+        localStorage.setItem("theme", dark ? "dark" : "light");
+        updateIcon(dark);
+      });
+    </script>
   </body>
 </html>
