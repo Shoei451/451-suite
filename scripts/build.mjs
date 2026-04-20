@@ -5,7 +5,10 @@ import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { minify } from "html-minifier-terser";
 import esbuild from "esbuild";
 
-const rootDir = new URL("..", import.meta.url).pathname;
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.join(__dirname, "..");
 const sourceDir = path.join(rootDir, "src");
 const outputDir = path.join(rootDir, "dist");
 

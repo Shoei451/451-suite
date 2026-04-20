@@ -9,6 +9,8 @@
       content="課題・試験・授業を一括管理。デバイス間で同期できる学生向けカレンダーアプリ。"
     />
     <link rel="icon" href="favicon/calendar-favicon.svg" />
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#FF9800" />
     <link rel="stylesheet" href="css/introduction.css" />
   </head>
   <body>
@@ -518,6 +520,19 @@
         localStorage.setItem("theme", isDark ? "dark" : "light");
         updateIcon(isDark);
       });
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(registration => {
+              console.log('SW registered:', registration);
+            })
+            .catch(registrationError => {
+              console.log('SW registration failed:', registrationError);
+            });
+        });
+      }
     </script>
   </body>
 </html>

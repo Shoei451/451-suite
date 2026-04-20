@@ -7,6 +7,8 @@
     <link rel="image/svg+xml" href="images/favicon.svg" />
     <link rel="icon" href="images/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#4CAF50" />
     <style>
       *,
       *::before,
@@ -1704,5 +1706,18 @@
         </div>
       </div>
     </footer>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(registration => {
+              console.log('SW registered:', registration);
+            })
+            .catch(registrationError => {
+              console.log('SW registration failed:', registrationError);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
