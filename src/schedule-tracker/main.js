@@ -661,9 +661,11 @@ function switchTab(name) {
 // ============================================================
 // INIT
 // ============================================================
-document.querySelectorAll(".tab-btn, .navbar-tab").forEach((btn) =>
-  btn.addEventListener("click", () => switchTab(btn.dataset.tab))
-);
+document
+  .querySelectorAll(".tab-btn, .navbar-tab")
+  .forEach((btn) =>
+    btn.addEventListener("click", () => switchTab(btn.dataset.tab)),
+  );
 
 document.getElementById("btn-signout").addEventListener("click", async () => {
   clearInterval(clockTick);
@@ -671,10 +673,16 @@ document.getElementById("btn-signout").addEventListener("click", async () => {
   await signOutAndRedirect();
 });
 
-document.getElementById("btn-allow-notif").addEventListener("click", requestNotifPermission);
-document.getElementById("btn-allow-notif-sb").addEventListener("click", requestNotifPermission);
+document
+  .getElementById("btn-allow-notif")
+  .addEventListener("click", requestNotifPermission);
+document
+  .getElementById("btn-allow-notif-sb")
+  .addEventListener("click", requestNotifPermission);
 document.getElementById("btn-add").addEventListener("click", addSlot);
-document.getElementById("btn-cancel-edit").addEventListener("click", cancelEdit);
+document
+  .getElementById("btn-cancel-edit")
+  .addEventListener("click", cancelEdit);
 
 try {
   await bootApp();
@@ -685,4 +693,3 @@ try {
   document.getElementById("clock-time").textContent = "Error";
   document.getElementById("clock-date").textContent = err.message;
 }
-;

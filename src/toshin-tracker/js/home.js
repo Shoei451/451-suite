@@ -127,8 +127,9 @@ function renderCourseProgress() {
         <div class="progress-bar">
           <div class="progress-fill${pct === 100 ? " done" : pct < 30 ? " warn" : ""}" style="width:${pct}%"></div>
         </div>
-        ${g
-          ? `
+        ${
+          g
+            ? `
         <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <span style="font-size:12px;color:var(--ink-3)">${ym.replace("-", "年")}月の目標</span>
@@ -139,7 +140,7 @@ function renderCourseProgress() {
           </div>
         </div>
         `
-          : ""
+            : ""
         }
       </div>
     `;

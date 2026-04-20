@@ -117,7 +117,9 @@
         font-weight: 600;
         font-family: inherit;
         cursor: pointer;
-        transition: opacity var(--t-fast), transform var(--t-fast);
+        transition:
+          opacity var(--t-fast),
+          transform var(--t-fast);
       }
 
       .btn-hero-primary:hover {
@@ -322,7 +324,6 @@
     </style>
   </head>
   <body>
-
     <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-brand">
@@ -331,8 +332,16 @@
       </div>
       <div class="topbar-right">
         <button class="btn-icon-sm" id="theme-toggle" aria-label="テーマ切替">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"
+            />
           </svg>
         </button>
         <a href="home.html" class="btn-ghost">Log in</a>
@@ -349,13 +358,35 @@
       <div class="hero-actions">
         <a href="home.html" class="btn-hero-primary">
           アプリを使う
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+            />
           </svg>
         </a>
-        <a href="https://github.com/Shoei451" target="_blank" rel="noopener noreferrer" class="btn-hero-ghost">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+        <a
+          href="https://github.com/Shoei451"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-hero-ghost"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+            />
           </svg>
           GitHub
         </a>
@@ -366,7 +397,11 @@
     <section class="section">
       <div class="section-label">Apps</div>
       <div class="apps-grid">
-        <a class="app-card" href="calendar/home.html" style="--card-accent: #bd5d38">
+        <a
+          class="app-card"
+          href="calendar/home.html"
+          style="--card-accent: #bd5d38"
+        >
           <div class="card-icon" style="background: #bd5d38">C</div>
           <div class="card-title">451-calendar</div>
           <div class="card-desc">
@@ -375,7 +410,11 @@
           <div class="card-arrow">Open <span>→</span></div>
         </a>
 
-        <a class="app-card" href="schedule-tracker/home.html" style="--card-accent: #2d6a5f">
+        <a
+          class="app-card"
+          href="schedule-tracker/home.html"
+          style="--card-accent: #2d6a5f"
+        >
           <div class="card-icon" style="background: #2d6a5f">S</div>
           <div class="card-title">Schedule</div>
           <div class="card-desc">
@@ -384,7 +423,11 @@
           <div class="card-arrow">Open <span>→</span></div>
         </a>
 
-        <a class="app-card" href="toshin-tracker/home.html" style="--card-accent: #3659a7">
+        <a
+          class="app-card"
+          href="toshin-tracker/home.html"
+          style="--card-accent: #3659a7"
+        >
           <div class="card-icon" style="background: #3659a7">T</div>
           <div class="card-title">東進受講トラッカー</div>
           <div class="card-desc">
@@ -403,14 +446,19 @@
           <div class="feature-icon">☁️</div>
           <div class="feature-text">
             <h3>クラウド同期</h3>
-            <p>Supabase + Row Level Securityでデバイスをまたいでデータを安全に同期。</p>
+            <p>
+              Supabase + Row Level
+              Securityでデバイスをまたいでデータを安全に同期。
+            </p>
           </div>
         </div>
         <div class="feature-item">
           <div class="feature-icon">📅</div>
           <div class="feature-text">
             <h3>繰り返し・複数日登録</h3>
-            <p>週次の授業や連続する期間の課題を一括で登録。カレンダーとトラッカーで連携。</p>
+            <p>
+              週次の授業や連続する期間の課題を一括で登録。カレンダーとトラッカーで連携。
+            </p>
           </div>
         </div>
         <div class="feature-item">
@@ -424,7 +472,9 @@
           <div class="feature-icon">📱</div>
           <div class="feature-text">
             <h3>モバイル対応</h3>
-            <p>すべてのアプリがスマートフォンで快適に動作するレスポンシブデザイン。</p>
+            <p>
+              すべてのアプリがスマートフォンで快適に動作するレスポンシブデザイン。
+            </p>
           </div>
         </div>
       </div>
@@ -447,20 +497,29 @@
       <p>© 2025 Shoei Okamoto · 451-suite</p>
       <div class="footer-links">
         <a href="home.html">Log in</a>
-        <a href="https://github.com/Shoei451" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a
+          href="https://github.com/Shoei451"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub</a
+        >
       </div>
     </footer>
 
     <script>
       const saved = localStorage.getItem("theme");
-      const isDark = saved === "dark" || (!saved && matchMedia("(prefers-color-scheme: dark)").matches);
+      const isDark =
+        saved === "dark" ||
+        (!saved && matchMedia("(prefers-color-scheme: dark)").matches);
       if (isDark) document.body.classList.add("dark");
 
       const toggle = document.getElementById("theme-toggle");
       const moonSvg = `<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>`;
       const sunSvg = `<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></svg>`;
 
-      function updateIcon(dark) { toggle.innerHTML = dark ? sunSvg : moonSvg; }
+      function updateIcon(dark) {
+        toggle.innerHTML = dark ? sunSvg : moonSvg;
+      }
       updateIcon(isDark);
       toggle.addEventListener("click", () => {
         const dark = document.body.classList.toggle("dark");

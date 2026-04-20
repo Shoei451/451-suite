@@ -194,11 +194,9 @@ function openCellEditor(cellEl, dow, period) {
     .join("");
 
   // 既存の科目一覧を収集（重複排除・空除外）
-  const usedSubjects = [...new Set(
-    [...cells.values()]
-      .map((c) => c.subject)
-      .filter(Boolean)
-  )];
+  const usedSubjects = [
+    ...new Set([...cells.values()].map((c) => c.subject).filter(Boolean)),
+  ];
 
   const usedSubjectChips = usedSubjects.length
     ? `<div class="tt-popover-label" style="margin-bottom:4px;">登録済みの科目</div>
@@ -207,11 +205,14 @@ function openCellEditor(cellEl, dow, period) {
        </div>`
     : "";
   const maxPeriod = getMaxPeriod();
-  const dayOptions = DAY_LABELS.map((label, i) =>
-    `<option value="${i}"${i === dow ? " selected" : ""}>${label}</option>`
+  const dayOptions = DAY_LABELS.map(
+    (label, i) =>
+      `<option value="${i}"${i === dow ? " selected" : ""}>${label}</option>`,
   ).join("");
-  const periodOptions = Array.from({ length: maxPeriod }, (_, i) =>
-    `<option value="${i + 1}"${i + 1 === period ? " selected" : ""}>${i + 1}限</option>`
+  const periodOptions = Array.from(
+    { length: maxPeriod },
+    (_, i) =>
+      `<option value="${i + 1}"${i + 1 === period ? " selected" : ""}>${i + 1}限</option>`,
   ).join("");
 
   popover.innerHTML = `
@@ -236,8 +237,8 @@ function openCellEditor(cellEl, dow, period) {
         />
         <datalist id="tt-subject-list">
           ${Object.keys(SUBJECT_ICON_MAP)
-      .map((s) => `<option value="${s}">`)
-      .join("")}
+            .map((s) => `<option value="${s}">`)
+            .join("")}
         </datalist>
       </label>
       ${usedSubjectChips}
@@ -302,9 +303,10 @@ function openCellEditor(cellEl, dow, period) {
     .querySelector(".tt-btn-cancel")
     .addEventListener("click", closePopover);
 
-
   // 閉じるボタン
-  popover.querySelector(".tt-popover-close").addEventListener("click", closePopover);
+  popover
+    .querySelector(".tt-popover-close")
+    .addEventListener("click", closePopover);
 
   // 曜日・時限セレクター変更 → ターゲットセルを切り替え
   let currentDow = dow;
@@ -337,17 +339,24 @@ function openCellEditor(cellEl, dow, period) {
     }
   });
 
-  popover.querySelector(".tt-popover-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const subject = input.value.trim();
-    closePopover();
-    try {
-      await saveTimetableCell(currentDow, currentPeriod, subject, selectedIcon);
-      renderGrid();
-    } catch (err) {
-      alert("保存に失敗しました: " + err.message);
-    }
-  });
+  popover
+    .querySelector(".tt-popover-form")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const subject = input.value.trim();
+      closePopover();
+      try {
+        await saveTimetableCell(
+          currentDow,
+          currentPeriod,
+          subject,
+          selectedIcon,
+        );
+        renderGrid();
+      } catch (err) {
+        alert("保存に失敗しました: " + err.message);
+      }
+    });
 
   // Focus input
   input.focus();

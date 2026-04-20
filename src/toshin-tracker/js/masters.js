@@ -96,23 +96,24 @@ function renderMasterList() {
         <div class="progress-bar" style="margin-bottom:16px;">
           <div class="progress-fill${pct === 100 ? " done" : ""}" style="width:${pct}%"></div>
         </div>
-        ${thisMonthStages.length
-          ? `
+        ${
+          thisMonthStages.length
+            ? `
           <div style="font-size:12px;color:var(--green-dark);font-weight:600;margin-bottom:12px;">
             📌 今月の予定: ${thisMonthStages.map((s) => escapeHtml(s.name)).join("、")}
           </div>
         `
-          : ""
+            : ""
         }
         <div class="stage-list">
           ${stages
-          .map((stage) => {
-            const prog = state.progress.find((p) => p.stage_id === stage.id);
-            const done = prog?.is_completed ?? false;
-            const goalMonth = prog?.year_month_goal;
-            const isThisMonth = goalMonth === currentMonth;
+            .map((stage) => {
+              const prog = state.progress.find((p) => p.stage_id === stage.id);
+              const done = prog?.is_completed ?? false;
+              const goalMonth = prog?.year_month_goal;
+              const isThisMonth = goalMonth === currentMonth;
 
-            return `
+              return `
               <div class="stage-item${done ? " done" : ""}${isThisMonth ? " this-month" : ""}" data-stage-id="${stage.id}">
                 <div class="stage-check">
                   <div class="stage-checkbox${done ? " checked" : ""}">
@@ -129,8 +130,8 @@ function renderMasterList() {
                 </div>
               </div>
             `;
-          })
-          .join("")}
+            })
+            .join("")}
         </div>
       </div>
     `;
