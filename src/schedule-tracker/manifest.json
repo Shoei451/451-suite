@@ -7,7 +7,7 @@
   "theme_color": "#2196F3",
   "icons": [
     {
-      "src": "./icon.svg",
+      "src": "./schedule-tracker.svg",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
