@@ -1,6 +1,6 @@
 const CACHE_NAME = "schedule-tracker-cache-v1";
 
-const PRECACHE_ASSETS = ["/", "/index.html"];
+const PRECACHE_ASSETS = ["/", "/index.html", "/home", "/home.html"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
